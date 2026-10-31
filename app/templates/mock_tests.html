@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}मॉक टेस्ट सिरीज (Mock Tests) — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #f59e0b;">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;">
+        <i class="bi bi-stopwatch-fill"></i>
+      </div>
+      <div>
+        <h1 class="h2 fw-bold text-white mb-0">ऑनलाइन मॉक टेस्ट सिरीज (CBT Mock Test Series)</h1>
+        <span class="small text-warning marathi-text">वेळेचे अचूक व्यवस्थापन व परीक्षेसारखा प्रत्यक्ष अनुभव</span>
+      </div>
+    </div>
+    <p class="text-light opacity-90 mb-0 small">
+      नवीनतम पॅटर्ननुसार (TCS / IBPS / MPSC) संगणकीय वातावरणात वेळ लावून चाचण्या द्या आणि त्वरित सविस्तर निकाल व स्पष्टीकरणे मिळवा.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    {% for p in papers %}
+    <div class="col-lg-4 col-md-6">
+      <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+        <div>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-dark">{{ p.year }}</span>
+            <span class="badge badge-saffron"><i class="bi bi-clock me-1"></i> {{ p.duration_minutes }} मिनिटे</span>
+          </div>
+
+          <h5 class="fw-bold text-dark mb-1">{{ p.title }}</h5>
+          <small class="text-muted d-block mb-3">{{ p.district }} • {{ p.exam_type }}</small>
+
+          <div class="bg-light p-3 rounded-3 border small mb-3">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">एकूण प्रश्न:</span>
+              <strong class="text-dark">{{ p.total_questions }} प्रश्न</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted">एकूण गुण:</span>
+              <strong class="text-success">{{ p.total_marks }} गुण</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">नकारात्मक गुण:</span>
+              <strong class="text-danger">{% if p.negative_marks > 0 %}{{ p.negative_marks }}{% else %}0.00 (नाही){% endif %}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-top d-flex gap-2">
+          <a href="{{ url_for('papers.paper_detail', paper_id=p.id) }}" class="btn btn-outline-secondary btn-sm flex-grow-1">
+            <i class="bi bi-info-circle"></i> माहिती
+          </a>
+          <a href="{{ url_for('tests.solve_paper', paper_id=p.id) }}" class="btn btn-success btn-sm flex-grow-1 fw-bold text-white shadow-sm">
+            <i class="bi bi-play-circle-fill"></i> टेस्ट सुरू करा
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

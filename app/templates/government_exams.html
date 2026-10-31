@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}शासकीय स्पर्धा परीक्षा कक्ष — ParikshaSetu{% endblock %}
+
+{% block content %}
+<!-- Section Header Banner -->
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #2563eb;">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;">
+        <i class="bi bi-building"></i>
+      </div>
+      <div>
+        <h1 class="h2 fw-bold text-white mb-0">महाराष्ट्र व केंद्रीय शासकीय स्पर्धा परीक्षा (Government Exams)</h1>
+        <span class="small text-warning marathi-text">MPSC, तलाठी, जिल्हा परिषद, SSC, रेल्वे व बँकिंग भरती</span>
+      </div>
+    </div>
+    <p class="text-light opacity-90 mb-0 small">
+      प्रत्येक परीक्षेसाठी स्वतंत्र अभ्यासक्रम, घटकनिहाय प्रश्नसंच, मागील वर्षांच्या अधिकृत सोडवलेल्या प्रश्नपत्रिका आणि संगणकीय CBT सराव टेस्ट.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    {% for ex in exams %}
+    <div class="col-lg-4 col-md-6">
+      <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+        <div>
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="badge bg-light text-dark border">{{ ex.category }}</span>
+            <span class="badge badge-saffron">{{ ex.badge }}</span>
+          </div>
+
+          <h4 class="fw-bold text-dark mb-1">{{ ex.name_mr }}</h4>
+          <h6 class="text-muted mb-3">{{ ex.name }}</h6>
+
+          <p class="small text-muted mb-4">{{ ex.description_mr or ex.description }}</p>
+
+          <div class="bg-light p-3 rounded-3 border mb-3 small">
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted"><i class="bi bi-clock me-1 text-primary"></i> कालावधी:</span>
+              <strong class="text-dark">{{ ex.duration_minutes }} मिनिटे</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-1">
+              <span class="text-muted"><i class="bi bi-question-circle me-1 text-success"></i> एकूण प्रश्न / गुण:</span>
+              <strong class="text-dark">{{ ex.total_questions }} प्रश्न ({{ ex.total_marks }} गुण)</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted"><i class="bi bi-x-circle me-1 text-danger"></i> नकारात्मक गुण:</span>
+              <strong class="text-dark">{% if ex.negative_marks > 0 %}{{ ex.negative_marks }} गुण{% else %}नाही (0.0){% endif %}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-top d-flex gap-2">
+          <a href="{{ url_for('exams.exam_details', exam_id=ex.id) }}" class="btn btn-outline-dark btn-sm flex-grow-1 fw-semibold">
+            <i class="bi bi-info-circle"></i> अभ्यासक्रम व पेपर्स
+          </a>
+          <a href="{{ url_for('papers.papers_list', exam_id=ex.id) }}" class="btn btn-primary btn-sm flex-grow-1 fw-semibold">
+            <i class="bi bi-play-circle"></i> प्रश्नपत्रिका ({{ ex.paper_count }})
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

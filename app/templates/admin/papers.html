@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}प्रश्नपत्रिका व्यवस्थापन व PDF अपलोड — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1"><i class="bi bi-file-earmark-arrow-up text-success me-2"></i>प्रश्नपत्रिका व PDF अपलोड व्यवस्थापन</h3>
+      <p class="text-muted small mb-0">मागील वर्षांच्या प्रश्नपत्रिका तयार करा, अधिकृत PDF आणि उत्तरतालिका अपलोड करा.</p>
+    </div>
+    <div>
+      <a href="{{ url_for('admin.import_papers') }}" class="btn btn-warning btn-sm fw-bold me-2">
+        <i class="bi bi-cloud-download"></i> JSON API आयात
+      </a>
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left"></i> डॅशबोर्ड
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Add Paper / Upload PDF Form -->
+    <div class="col-lg-5">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-plus-circle text-success me-2"></i>नवीन प्रश्नपत्रिका जोडा / अपलोड</h5>
+
+        <form method="POST" action="{{ url_for('admin.manage_papers') }}" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">संबंधित परीक्षा (Select Exam)</label>
+            <select name="exam_id" class="form-select form-select-sm" required>
+              {% for ex in exams %}
+                <option value="{{ ex.id }}">{{ ex.name_mr }} ({{ ex.id }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">वर्ष (Year)</label>
+              <input type="number" name="year" class="form-control form-control-sm" required value="2025">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">जिल्हा (District)</label>
+              <input type="text" name="district" class="form-control form-control-sm" required value="Pune Gramin">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">संवर्ग / पद (Recruitment Type)</label>
+            <input type="text" name="exam_type" class="form-control form-control-sm" value="Police Constable">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">प्रश्नपत्रिकेचे शीर्षक (Title)</label>
+            <input type="text" name="title" class="form-control form-control-sm" required placeholder="Maharashtra Police Constable 2025 Paper">
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-4">
+              <label class="form-label small fw-bold text-muted">कालावधी (मि.)</label>
+              <input type="number" name="duration_minutes" class="form-control form-control-sm" value="90">
+            </div>
+            <div class="col-4">
+              <label class="form-label small fw-bold text-muted">एकूण प्रश्न</label>
+              <input type="number" name="total_questions" class="form-control form-control-sm" value="100">
+            </div>
+            <div class="col-4">
+              <label class="form-label small fw-bold text-muted">कमाल गुण</label>
+              <input type="number" name="total_marks" class="form-control form-control-sm" value="100">
+            </div>
+          </div>
+
+          <!-- PDF Upload Field (Section 5) -->
+          <div class="mb-3 p-2 border rounded bg-light">
+            <label class="form-label small fw-bold text-primary mb-1">
+              <i class="bi bi-file-earmark-pdf"></i> प्रश्नपत्रिका PDF फाईल अपलोड करा:
+            </label>
+            <input type="file" name="pdf_file" class="form-control form-control-sm" accept=".pdf">
+            <small class="text-muted" style="font-size: 0.7rem;">किंवा आधीच होस्ट केलेली URL खाली टाका:</small>
+            <input type="text" name="pdf_url" class="form-control form-control-sm mt-1" placeholder="https://... किंवा /static/uploads/...">
+          </div>
+
+          <!-- Answer Key Upload Field -->
+          <div class="mb-3 p-2 border rounded bg-light">
+            <label class="form-label small fw-bold text-success mb-1">
+              <i class="bi bi-key-fill"></i> अधिकृत उत्तरतालिका (Answer Key PDF):
+            </label>
+            <input type="file" name="answer_key_file" class="form-control form-control-sm" accept=".pdf">
+            <input type="text" name="answer_key_url" class="form-control form-control-sm mt-1" placeholder="Answer key PDF URL">
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 fw-bold">
+            <i class="bi bi-check2-circle me-1"></i> प्रश्नपत्रिका जतन करा
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Existing Papers List -->
+    <div class="col-lg-7">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3">नोंदणीकृत प्रश्नपत्रिका सूची ({{ papers|length }})</h5>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle small">
+            <thead class="table-light">
+              <tr>
+                <th>वर्ष/जिल्हा</th>
+                <th>शीर्षक</th>
+                <th>PDF</th>
+                <th>Key</th>
+                <th>कृती</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in papers %}
+              <tr>
+                <td>
+                  <span class="badge bg-dark">{{ p.year }}</span>
+                  <div class="text-muted mt-1" style="font-size: 0.75rem;">{{ p.district }}</div>
+                </td>
+                <td>
+                  <strong class="d-block text-dark">{{ p.title }}</strong>
+                  <span class="badge badge-navy">{{ p.exam_id }}</span>
+                </td>
+                <td>
+                  {% if p.pdf_url %}
+                    <a href="{{ p.pdf_url }}" target="_blank" class="badge bg-success text-decoration-none">PDF &nearr;</a>
+                  {% else %}
+                    <span class="badge bg-secondary">नाही</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if p.answer_key_url %}
+                    <span class="badge bg-info text-dark">आहे</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted border">नाही</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <form method="POST" action="{{ url_for('admin.delete_paper', paper_id=p.id) }}" onsubmit="return confirm('खात्री आहे का? हा पेपर हटवायचा आहे?');" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger btn-sm p-1" title="हटवा">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

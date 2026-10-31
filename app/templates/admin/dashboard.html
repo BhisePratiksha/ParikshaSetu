@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}प्रशासक नियंत्रण कक्ष (Admin Dashboard) — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container-fluid px-lg-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <h1 class="h3 fw-bold text-white mb-1"><i class="bi bi-shield-lock-fill text-warning me-2"></i>प्रशासक नियंत्रण केंद्र (Admin Command Center)</h1>
+        <small class="text-white-50">परीक्षा, अभ्यासक्रम, प्रश्नसंच, PDF अपलोड आणि मॉक API डेटा आयात व्यवस्थापन</small>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a href="{{ url_for('admin.import_papers') }}" class="btn btn-warning fw-bold btn-sm shadow-sm text-dark">
+          <i class="bi bi-cloud-arrow-down-fill me-1"></i> JSON Mock API आयात
+        </a>
+        <a href="{{ url_for('admin.manage_papers') }}" class="btn btn-primary fw-bold btn-sm shadow-sm">
+          <i class="bi bi-upload me-1"></i> नवीन पेपर / PDF जोडा
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid px-lg-4 py-4">
+  <!-- Stats Metric Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-2 col-sm-4 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-primary">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">परीक्षा</span>
+        <h3 class="fw-bold mb-0 text-primary">{{ stats.exams }}</h3>
+        <a href="{{ url_for('admin.manage_exams') }}" class="small text-decoration-none">व्यवस्थापित करा &rarr;</a>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-info">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">विषय</span>
+        <h3 class="fw-bold mb-0 text-info">{{ stats.subjects }}</h3>
+        <a href="{{ url_for('admin.manage_subjects') }}" class="small text-decoration-none">व्यवस्थापित करा &rarr;</a>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-success">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">प्रश्नपत्रिका</span>
+        <h3 class="fw-bold mb-0 text-success">{{ stats.papers }}</h3>
+        <a href="{{ url_for('admin.manage_papers') }}" class="small text-decoration-none">व्यवस्थापित करा &rarr;</a>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-warning">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">प्रश्न बँक</span>
+        <h3 class="fw-bold mb-0 text-warning">{{ stats.questions }}</h3>
+        <a href="{{ url_for('admin.manage_questions') }}" class="small text-decoration-none">व्यवस्थापित करा &rarr;</a>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-danger">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">नोंदणीकृत विद्यार्थी</span>
+        <h3 class="fw-bold mb-0 text-danger">{{ stats.users }}</h3>
+        <small class="text-muted">उमेदवार</small>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-secondary">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">चाचण्या निकाल</span>
+        <h3 class="fw-bold mb-0 text-secondary">{{ stats.results }}</h3>
+        <small class="text-muted">सबमिशन</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-4">
+    <!-- Recent Papers Added -->
+    <div class="col-lg-7">
+      <div class="custom-card p-4 bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0"><i class="bi bi-file-earmark-text text-primary me-2"></i>अलीकडे जोडलेल्या प्रश्नपत्रिका</h5>
+          <a href="{{ url_for('admin.manage_papers') }}" class="btn btn-sm btn-outline-dark">सर्व पेपर्स</a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle small mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>शीर्षक</th>
+                <th>वर्ष</th>
+                <th>जिल्हा</th>
+                <th>PDF स्थिती</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in recent_papers %}
+              <tr>
+                <td><code>{{ p.id }}</code></td>
+                <td class="fw-semibold text-dark">{{ p.title }}</td>
+                <td>{{ p.year }}</td>
+                <td>{{ p.district }}</td>
+                <td>
+                  {% if p.pdf_url %}
+                    <span class="badge bg-success">उपलब्ध</span>
+                  {% else %}
+                    <span class="badge bg-secondary">नाही</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- API Import Logs (Section 4) -->
+    <div class="col-lg-5">
+      <div class="custom-card p-4 bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history text-warning me-2"></i>API आयात नोंदी (Import Logs)</h5>
+          <a href="{{ url_for('admin.import_papers') }}" class="btn btn-sm btn-outline-warning text-dark fw-bold">नवीन आयात</a>
+        </div>
+
+        {% if import_logs %}
+          <div class="d-flex flex-column gap-2">
+            {% for log in import_logs %}
+            <div class="p-2 border rounded bg-light small">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="badge {% if log.status == 'success' %}bg-success{% else %}bg-danger{% endif %} text-uppercase">
+                  {{ log.status }}
+                </span>
+                <small class="text-muted">{{ log.timestamp[:16].replace('T', ' ') }}</small>
+              </div>
+              <div class="text-truncate text-muted" style="font-size: 0.75rem;">URL: {{ log.url }}</div>
+              {% if log.error %}
+                <div class="text-danger small mt-1"><i class="bi bi-x-circle"></i> {{ log.error }}</div>
+              {% else %}
+                <div class="text-success small mt-1"><i class="bi bi-check2"></i> {{ log.imported_count }} नवीन पेपर्स आयात केले</div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center py-4 text-muted small">
+            कोणत्याही API आयात नोंदी उपलब्ध नाहीत.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Action Navigation Toolbar -->
+  <div class="custom-card p-4 bg-white">
+    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-grid-fill text-primary me-2"></i>प्रशासकीय नेव्हिगेशन व कृती</h5>
+    <div class="row g-3">
+      <div class="col-md-3 col-sm-6">
+        <a href="{{ url_for('admin.manage_exams') }}" class="p-3 border rounded text-decoration-none d-flex align-items-center gap-3 bg-light hover-shadow text-dark">
+          <i class="bi bi-building fs-3 text-primary"></i>
+          <div>
+            <strong class="d-block">परीक्षा व्यवस्थापन</strong>
+            <small class="text-muted">परीक्षा जोडा किंवा बदला</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="{{ url_for('admin.manage_subjects') }}" class="p-3 border rounded text-decoration-none d-flex align-items-center gap-3 bg-light hover-shadow text-dark">
+          <i class="bi bi-book fs-3 text-info"></i>
+          <div>
+            <strong class="d-block">विषय व घटक</strong>
+            <small class="text-muted">अभ्यासक्रम मांडणी</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="{{ url_for('admin.manage_papers') }}" class="p-3 border rounded text-decoration-none d-flex align-items-center gap-3 bg-light hover-shadow text-dark">
+          <i class="bi bi-file-earmark-arrow-up fs-3 text-success"></i>
+          <div>
+            <strong class="d-block">प्रश्नपत्रिका व PDF</strong>
+            <small class="text-muted">पेपर्स व कीज अपलोड करा</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-3 col-sm-6">
+        <a href="{{ url_for('admin.manage_questions') }}" class="p-3 border rounded text-decoration-none d-flex align-items-center gap-3 bg-light hover-shadow text-dark">
+          <i class="bi bi-question-square fs-3 text-warning"></i>
+          <div>
+            <strong class="d-block">प्रश्नसंच (Question Bank)</strong>
+            <small class="text-muted">MCQ व स्पष्टीकरणे जोडा</small>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

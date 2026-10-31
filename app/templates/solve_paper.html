@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}CBT परीक्षा चालू आहे: {{ paper.title }} — ParikshaSetu{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Clean test interface header */
+  .cbt-header {
+    background: #0d233a;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 2px solid #ff6b00;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- CBT Active Test Navigation Header -->
+<div class="cbt-header sticky-top">
+  <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div>
+      <h6 class="mb-0 fw-bold text-white d-flex align-items-center gap-2">
+        <span class="badge bg-danger">CBT परीक्षा चालू आहे</span>
+        <span>{{ paper.title }}</span>
+      </h6>
+      <small class="text-white-50" style="font-size: 0.75rem;">सत्र: {{ paper.shift }} • नकारात्मक गुण: {{ paper.negative_marks }}</small>
+    </div>
+
+    <!-- Timer Countdown -->
+    <div class="d-flex align-items-center gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="small text-white-50"><i class="bi bi-clock-history"></i> शिल्लक वेळ:</span>
+        <div id="cbt-timer-display" class="cbt-timer">
+          --:--
+        </div>
+      </div>
+
+      <button id="btn-submit-exam" type="button" class="btn btn-warning fw-bold px-3 py-1 shadow-sm">
+        <i class="bi bi-check2-circle me-1"></i> अंतिम सबमिट (Submit)
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress rounded-0" style="height: 6px;">
+  <div id="cbt-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%"></div>
+</div>
+
+<!-- CBT Exam Body Container -->
+<div class="container-fluid px-lg-4 py-3 cbt-container">
+  <div class="row g-3">
+    <!-- Left Column: Single Question at a Time Area -->
+    <div class="col-lg-8 col-xl-9">
+      <div class="question-box d-flex flex-column justify-content-between h-100">
+        <div>
+          <!-- Question Header -->
+          <div class="d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-primary fs-6 px-3 py-1">
+                प्रश्न क्रमांक <span id="q-current-number">1</span> / <span id="q-total-number">{{ questions|length }}</span>
+              </span>
+              <span id="q-subject-badge" class="badge badge-saffron">मराठी व्याकरण</span>
+              <span id="q-topic-badge" class="badge bg-light text-secondary border">प्रयोग</span>
+            </div>
+
+            <div>
+              <span class="badge bg-light text-success border">
+                गुणदान: <strong id="q-marks">+1.0 / -0.0</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- Question Body (Marathi + Optional English) -->
+          <div class="mb-4">
+            <h5 id="question-text-content" class="fw-bold text-dark lh-base marathi-text" style="font-size: 1.25rem;">
+              प्रश्न लोड होत आहे...
+            </h5>
+            <p id="question-text-en" class="text-muted small fst-italic mt-2" style="display: none;"></p>
+          </div>
+
+          <!-- Multiple Choice Options (A, B, C, D) -->
+          <div id="options-list-container" class="mb-4">
+            <!-- Dynamically populated by cbt_engine.js -->
+          </div>
+        </div>
+
+        <!-- Question Bottom Actions & Navigation (Section 6) -->
+        <div class="pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex gap-2">
+            <!-- Clear Answer -->
+            <button id="btn-clear-answer" type="button" class="btn btn-outline-secondary btn-sm fw-semibold">
+              <i class="bi bi-x-circle me-1"></i> उत्तर रद्द करा (Clear)
+            </button>
+
+            <!-- Mark for Review -->
+            <button id="btn-mark-review" type="button" class="btn btn-outline-warning btn-sm fw-semibold">
+              <i class="bi bi-bookmark me-1"></i> पुनरावलोकन (Review)
+            </button>
+          </div>
+
+          <div class="d-flex gap-2">
+            <!-- Previous Button -->
+            <button id="btn-prev-question" type="button" class="btn btn-outline-dark btn-sm fw-semibold px-3" disabled>
+              <i class="bi bi-arrow-left me-1"></i> मागील (Previous)
+            </button>
+
+            <!-- Next Button -->
+            <button id="btn-next-question" type="button" class="btn btn-primary btn-sm fw-semibold px-4">
+              पुढील प्रश्न (Next) <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Question Palette Navigation & Status Counters (Section 6) -->
+    <div class="col-lg-4 col-xl-3">
+      <div class="custom-card p-3 h-100 bg-white">
+        <!-- Palette Status Legend Counters -->
+        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+          <i class="bi bi-grid-3x3-gap-fill text-primary me-1"></i> प्रश्न पॅलेट (Question Palette)
+        </h6>
+
+        <div class="row g-2 mb-3 small text-center">
+          <div class="col-4">
+            <div class="p-2 border rounded bg-light">
+              <span id="stat-answered-count" class="d-block fw-bold fs-6 text-success">0</span>
+              <small class="text-muted" style="font-size: 0.7rem;">सोडवलेले (Answered)</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2 border rounded bg-light">
+              <span id="stat-unanswered-count" class="d-block fw-bold fs-6 text-secondary">0</span>
+              <small class="text-muted" style="font-size: 0.7rem;">शिल्लक (Pending)</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="p-2 border rounded bg-light">
+              <span id="stat-marked-count" class="d-block fw-bold fs-6 text-warning">0</span>
+              <small class="text-muted" style="font-size: 0.7rem;">रिव्ह्यू (Review)</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legend Indicators -->
+        <div class="p-2 border rounded-2 bg-light small mb-3" style="font-size: 0.75rem;">
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="palette-btn answered" style="width: 18px; height: 18px; font-size: 0;"></span>
+            <span>सोडवलेले (Green = Answered)</span>
+          </div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="palette-btn marked" style="width: 18px; height: 18px; font-size: 0;"></span>
+            <span>पुनरावलोकन चिन्हांकित (Purple = Review)</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="palette-btn unanswered" style="width: 18px; height: 18px; font-size: 0;"></span>
+            <span>न सोडवलेले (White = Unanswered)</span>
+          </div>
+        </div>
+
+        <!-- Palette Grid Buttons (1, 2, 3... N) -->
+        <div id="question-palette-container" class="d-flex flex-wrap gap-1 justify-content-start overflow-auto" style="max-height: 380px;">
+          <!-- Dynamically generated by cbt_engine.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Final Submission Confirmation Modal (Section 6) -->
+<div class="modal fade" id="submitConfirmModal" tabindex="-1" aria-labelledby="submitConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning-subtle">
+        <h5 class="modal-title fw-bold text-dark" id="submitConfirmLabel">
+          <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>परीक्षा अंतिम सबमिशन पुष्टी
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="submit-confirm-summary">
+        <!-- Injected by cbt_engine.js -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">सराव सुरू ठेवा</button>
+        <button type="button" id="btn-modal-final-submit" class="btn btn-success fw-bold px-4">होय, परीक्षा जमा करा!</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- CBT Engine JS -->
+<script src="{{ url_for('static', filename='js/cbt_engine.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const questionsData = {{ questions_json|safe }};
+    const cbt = new CbtEngine({
+      questions: questionsData,
+      attemptId: "{{ attempt.id }}",
+      durationMinutes: {{ attempt.duration_minutes }},
+      submitUrl: "{{ url_for('tests.submit_test', attempt_id=attempt.id) }}"
+    });
+  });
+</script>
+{% endblock %}

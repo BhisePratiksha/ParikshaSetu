@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}लॉगिन (Login) — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="custom-card p-4 p-md-5 bg-white">
+        <div class="text-center mb-4">
+          <div style="width: 50px; height: 50px; border-radius: 12px; background: linear-gradient(135deg, #ff6b00 0%, #ffa800 100%); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem;" class="mb-2">
+            <i class="bi bi-box-arrow-in-right"></i>
+          </div>
+          <h3 class="fw-bold text-dark">उमेदवार लॉगिन</h3>
+          <p class="text-muted small">आपल्या खात्यामध्ये प्रवेश करा व चाचण्या द्या</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.login') }}">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">ईमेल आयडी (Email Address)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" class="form-control" placeholder="उदा. student@parikshasetu.com" required autofocus>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-muted">पासवर्ड (Password)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+              <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mb-3" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border: none;">
+            लॉगिन करा (Login)
+          </button>
+        </form>
+
+        <div class="p-3 bg-light rounded-3 border small mb-3">
+          <strong class="d-block text-dark mb-1"><i class="bi bi-key-fill text-warning me-1"></i>डेमो लॉगिन क्रेडेंशियल्स:</strong>
+          <div class="text-muted">• <strong>Admin:</strong> admin@parikshasetu.com / Admin@123</div>
+          <div class="text-muted">• <strong>Student:</strong> student@parikshasetu.com / Student@123</div>
+        </div>
+
+        <div class="text-center small text-muted">
+          अद्याप खाते नाही का? <a href="{{ url_for('auth.register') }}" class="fw-bold text-primary text-decoration-none">येथे नवीन नोंदणी करा</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

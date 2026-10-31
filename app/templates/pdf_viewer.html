@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}PDF व्ह्यूअर — {{ paper.title }} — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-3 bg-white border-bottom shadow-sm">
+  <div class="container-fluid px-lg-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-1 small">
+            <li class="breadcrumb-item"><a href="{{ url_for('papers.papers_list') }}">PYQs</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('papers.paper_detail', paper_id=paper.id) }}">{{ paper.id }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">PDF Viewer</li>
+          </ol>
+        </nav>
+        <h5 class="fw-bold text-dark mb-0">
+          <i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i>
+          {{ paper.title }}
+          {% if pdf_type == 'answer_key' %}<span class="badge bg-info text-dark ms-2">उत्तरतालिका (Answer Key)</span>{% endif %}
+        </h5>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        {% if pdf_url %}
+          <a href="{{ url_for('papers.download_pdf', paper_id=paper.id, type=pdf_type) }}" class="btn btn-outline-secondary btn-sm fw-semibold">
+            <i class="bi bi-download me-1"></i> डाऊनलोड PDF
+          </a>
+        {% endif %}
+        <a href="{{ url_for('tests.solve_paper', paper_id=paper.id) }}" class="btn btn-success btn-sm fw-bold text-white">
+          <i class="bi bi-play-circle-fill me-1"></i> ही परीक्षा ऑनलाइन सोडवा
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid px-lg-4 py-3">
+  {% if pdf_url %}
+    <div class="custom-card p-2 bg-white">
+      <!-- Embedded PDF Viewer using object/iframe -->
+      <div class="pdf-container">
+        <object data="{{ pdf_url }}" type="application/pdf" width="100%" height="100%">
+          <iframe src="{{ pdf_url }}" width="100%" height="100%" style="border: none;">
+            <div class="p-5 text-center">
+              <i class="bi bi-file-earmark-pdf text-danger fs-1"></i>
+              <p class="mt-3">आपला ब्राउझर थेट PDF दाखवू शकत नाही.</p>
+              <a href="{{ url_for('papers.download_pdf', paper_id=paper.id, type=pdf_type) }}" class="btn btn-primary">
+                PDF डाऊनलोड करून उघडा
+              </a>
+            </div>
+          </iframe>
+        </object>
+      </div>
+    </div>
+  {% else %}
+    <!-- Graceful Fallback Message when PDF is missing (Section 5) -->
+    <div class="custom-card p-5 text-center bg-white my-4">
+      <div style="font-size: 4rem; color: #f59e0b;"><i class="bi bi-file-earmark-lock"></i></div>
+      <h4 class="fw-bold mt-2 text-dark">या प्रश्नपत्रिकेची PDF फाईल सध्या उपलब्ध नाही</h4>
+      <p class="text-muted small mb-4" style="max-width: 600px; margin: 0 auto;">
+        शासकीय परीक्षा मंडळाकडून मूळ कागदपत्रांची पडताळणी पूर्ण झाल्यावर अधिकृत PDF येथे उपलब्ध केली जाईल.
+        दरम्यान, आपण खालील बटनावर क्लिक करून या प्रश्नपत्रिकेचा संपूर्ण प्रश्नसंच प्रत्यक्ष ऑनलाइन सोडवू शकता.
+      </p>
+
+      <div class="d-flex justify-content-center gap-3">
+        <a href="{{ url_for('tests.solve_paper', paper_id=paper.id) }}" class="btn btn-success fw-bold px-4 py-2">
+          <i class="bi bi-play-circle-fill me-1"></i> ऑनलाइन सराव परीक्षा सुरू करा (Solve Online)
+        </a>
+        <a href="{{ url_for('papers.papers_list') }}" class="btn btn-outline-secondary px-4 py-2">
+          <i class="bi bi-arrow-left me-1"></i> इतर प्रश्नपत्रिका पहा
+        </a>
+      </div>
+
+      {% if session.get('user_role') == 'admin' %}
+        <div class="mt-4 pt-4 border-top">
+          <span class="badge bg-dark">प्रशासक सूचना</span>
+          <p class="small text-muted mt-2 mb-2">प्रशासक म्हणून आपण या प्रश्नपत्रिकेसाठी अधिकृत PDF अपलोड करू शकता:</p>
+          <a href="{{ url_for('admin.manage_papers') }}" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-upload me-1"></i> PDF अपलोड करा (Admin)
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

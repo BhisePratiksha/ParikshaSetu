@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}परीक्षा व्यवस्थापन — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1"><i class="bi bi-building text-primary me-2"></i>परीक्षा व्यवस्थापन (Exam Management)</h3>
+      <p class="text-muted small mb-0">शासकीय स्पर्धा परीक्षा तयार करा, संपादन करा किंवा काढून टाका.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> डॅशबोर्डवर परत
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <!-- Add / Edit Exam Form -->
+    <div class="col-lg-4">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-plus-circle text-success me-2"></i>नवीन परीक्षा जोडा</h5>
+
+        <form method="POST" action="{{ url_for('admin.manage_exams') }}">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">परीक्षा ओळख ID (उदा. police-bharti, mpsc)</label>
+            <input type="text" name="id" class="form-control form-control-sm" required placeholder="police-bharti">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">परीक्षेचे नाव (English)</label>
+            <input type="text" name="name" class="form-control form-control-sm" required placeholder="Maharashtra Police Bharti">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">परीक्षेचे नाव (मराठी)</label>
+            <input type="text" name="name_mr" class="form-control form-control-sm" required placeholder="महाराष्ट्र पोलीस भरती">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">वर्गवारी / खाते (Category)</label>
+            <input type="text" name="category" class="form-control form-control-sm" placeholder="State Police / Revenue">
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">वेळ (मि.)</label>
+              <input type="number" name="duration_minutes" class="form-control form-control-sm" value="90">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">एकूण प्रश्न</label>
+              <input type="number" name="total_questions" class="form-control form-control-sm" value="100">
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">एकूण गुण</label>
+              <input type="number" step="0.5" name="total_marks" class="form-control form-control-sm" value="100">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">नकारात्मक गुण</label>
+              <input type="number" step="0.25" name="negative_marks" class="form-control form-control-sm" value="0.0">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-success w-100 fw-bold">
+            <i class="bi bi-save me-1"></i> परीक्षा जतन करा
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Existing Exams List -->
+    <div class="col-lg-8">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3">नोंदणीकृत परीक्षा सूची ({{ exams|length }})</h5>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle small">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>मराठी नाव / English</th>
+                <th>वर्गवारी</th>
+                <th>कालावधी</th>
+                <th>गुण / निगेटिव्ह</th>
+                <th>कृती</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ex in exams %}
+              <tr>
+                <td><code>{{ ex.id }}</code></td>
+                <td>
+                  <strong class="d-block text-dark">{{ ex.name_mr }}</strong>
+                  <span class="text-muted">{{ ex.name }}</span>
+                </td>
+                <td><span class="badge bg-light text-dark border">{{ ex.category }}</span></td>
+                <td>{{ ex.duration_minutes }} मि.</td>
+                <td>{{ ex.total_marks }} / {{ ex.negative_marks }}</td>
+                <td>
+                  <form method="POST" action="{{ url_for('admin.delete_exam', exam_id=ex.id) }}" onsubmit="return confirm('खात्री आहे का? ही परीक्षा हटवायची आहे?');" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger btn-sm p-1" title="हटवा">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

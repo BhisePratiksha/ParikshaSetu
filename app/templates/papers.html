@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}मागील वर्षांच्या प्रश्नपत्रिका (Previous-Year Papers) — ParikshaSetu{% endblock %}
+
+{% block content %}
+<!-- Section Header Banner -->
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: #ff6b00; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;">
+        <i class="bi bi-journal-check"></i>
+      </div>
+      <div>
+        <h1 class="h2 fw-bold text-white mb-0">मागील वर्षांच्या प्रश्नपत्रिका (Previous-Year Papers Archive)</h1>
+        <span class="small text-warning marathi-text">अधिकृत प्रश्नपत्रिका, उत्तरतालिका व ऑनलाइन टेस्ट सराव</span>
+      </div>
+    </div>
+    <p class="text-light opacity-90 mb-0 small">
+      परीक्षा, वर्ष, जिल्हा आणि संवर्ग निवडून प्रश्नपत्रिका शोधा, PDF पहा, डाऊनलोड करा किंवा प्रत्यक्ष संगणकीय सराव (Solve Online) करा.
+    </p>
+  </div>
+</div>
+
+<div class="container py-4">
+  <!-- Multi-Criteria Filter Bar (Section 3) -->
+  <div class="custom-card p-3 mb-4 bg-white">
+    <form method="GET" action="{{ url_for('papers.papers_list') }}" class="row g-2 align-items-center">
+      <!-- 1. Select Exam -->
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-building me-1"></i>परीक्षा (Exam):</label>
+        <select name="exam_id" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व परीक्षा (All Exams)</option>
+          {% for ex in exams %}
+            <option value="{{ ex.id }}" {% if selected_exam == ex.id %}selected{% endif %}>{{ ex.name_mr }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- 2. Select Year -->
+      <div class="col-md-2 col-sm-6">
+        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-calendar me-1"></i>वर्ष (Year):</label>
+        <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व वर्षे (All Years)</option>
+          {% for yr in years %}
+            <option value="{{ yr }}" {% if selected_year == yr|string %}selected{% endif %}>{{ yr }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- 3. Select District -->
+      <div class="col-md-2 col-sm-6">
+        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>जिल्हा (District):</label>
+        <select name="district" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व जिल्हे (All)</option>
+          {% for d in districts %}
+            <option value="{{ d }}" {% if selected_district == d %}selected{% endif %}>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- 4. Search Title -->
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label small fw-bold text-muted mb-1"><i class="bi bi-search me-1"></i>शीर्षक शोधा (Search):</label>
+        <input type="text" name="search" class="form-control form-control-sm" placeholder="उदा. Pune, Constable, 2024" value="{{ search_query }}">
+      </div>
+
+      <!-- Submit / Reset Buttons -->
+      <div class="col-md-2 col-sm-12 d-flex gap-1 align-self-end mt-2 mt-md-0">
+        <button type="submit" class="btn btn-primary btn-sm flex-grow-1 fw-semibold">
+          <i class="bi bi-filter"></i> फिल्टर
+        </button>
+        <a href="{{ url_for('papers.papers_list') }}" class="btn btn-outline-secondary btn-sm" title="रीसेट करा">
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Papers Results Cards -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold mb-0 text-dark">
+      उपलब्ध प्रश्नपत्रिका ({{ papers|length }} पेपर्स)
+    </h5>
+    <small class="text-muted">
+      {% if selected_exam != 'all' %}<span class="badge bg-secondary me-1">{{ selected_exam }}</span>{% endif %}
+      {% if selected_year != 'all' %}<span class="badge bg-secondary me-1">{{ selected_year }}</span>{% endif %}
+    </small>
+  </div>
+
+  {% if papers %}
+    <div class="row g-4">
+      {% for p in papers %}
+      <div class="col-lg-4 col-md-6">
+        <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <!-- Header Badges -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-dark text-white fw-bold">{{ p.year }}</span>
+              <span class="badge bg-light text-primary border"><i class="bi bi-geo-alt"></i> {{ p.district }}</span>
+            </div>
+
+            <!-- Title -->
+            <h5 class="fw-bold text-dark mb-1">
+              <a href="{{ url_for('papers.paper_detail', paper_id=p.id) }}" class="text-decoration-none text-dark hover-primary">
+                {{ p.title }}
+              </a>
+            </h5>
+
+            <!-- Exam and Details -->
+            <div class="small text-muted mb-3">
+              <span class="badge badge-navy mb-1">{{ p.exam.name_mr or p.exam_id }}</span>
+              <div><i class="bi bi-card-checklist me-1 text-primary"></i> संवर्ग: <strong>{{ p.exam_type }}</strong></div>
+              <div><i class="bi bi-clock me-1 text-warning"></i> कालावधी: {{ p.duration_minutes }} मिनिटे ({{ p.total_questions }} प्रश्न)</div>
+              <div><i class="bi bi-award me-1 text-success"></i> गुण: {{ p.total_marks }} (नकारात्मक: {{ p.negative_marks }})</div>
+              <div><i class="bi bi-sun me-1 text-info"></i> सत्र: {{ p.shift }}</div>
+            </div>
+
+            <!-- Answer Key Status -->
+            <div class="mb-3 small">
+              {% if p.answer_key_url %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                  <i class="bi bi-check-circle-fill me-1"></i> अधिकृत उत्तरतालिका उपलब्ध
+                </span>
+              {% else %}
+                <span class="badge bg-light text-muted border">
+                  <i class="bi bi-info-circle me-1"></i> उत्तरतालिका लवकरच
+                </span>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Actions Grid (Section 3: View PDF, Download, Answer Key, Solve Online) -->
+          <div class="pt-3 border-top">
+            <div class="row g-2">
+              <!-- View PDF -->
+              <div class="col-6">
+                <a href="{{ url_for('papers.view_pdf', paper_id=p.id) }}" class="btn btn-outline-primary btn-sm w-100 fw-semibold">
+                  <i class="bi bi-eye"></i> View PDF
+                </a>
+              </div>
+
+              <!-- Download PDF -->
+              <div class="col-6">
+                <a href="{{ url_for('papers.download_pdf', paper_id=p.id) }}" class="btn btn-outline-secondary btn-sm w-100 fw-semibold">
+                  <i class="bi bi-download"></i> Download
+                </a>
+              </div>
+
+              <!-- View Answer Key -->
+              <div class="col-6">
+                {% if p.answer_key_url %}
+                  <a href="{{ url_for('papers.view_pdf', paper_id=p.id, type='answer_key') }}" class="btn btn-outline-info btn-sm w-100 fw-semibold">
+                    <i class="bi bi-key-fill"></i> Answer Key
+                  </a>
+                {% else %}
+                  <button class="btn btn-outline-light text-muted btn-sm w-100" disabled>
+                    <i class="bi bi-key"></i> Key Pending
+                  </button>
+                {% endif %}
+              </div>
+
+              <!-- Solve Online (CBT Exam) -->
+              <div class="col-6">
+                <a href="{{ url_for('tests.solve_paper', paper_id=p.id) }}" class="btn btn-success btn-sm w-100 text-white fw-bold shadow-sm">
+                  <i class="bi bi-play-circle-fill"></i> Solve Online
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <!-- Empty State (Section 3) -->
+    <div class="text-center py-5 custom-card p-5 bg-white">
+      <div style="font-size: 3.5rem; color: #94a3b8;"><i class="bi bi-file-earmark-x"></i></div>
+      <h4 class="fw-bold mt-2 text-dark">या निकषांसाठी प्रश्नपत्रिका उपलब्ध नाहीत</h4>
+      <p class="text-muted small mb-4">
+        कृपया इतर वर्ष, जिल्हा किंवा परीक्षेचा पर्याय निवडून पुन्हा शोधा किंवा सर्व प्रश्नपत्रिका पाहण्यासाठी फिल्टर रीसेट करा.
+      </p>
+      <a href="{{ url_for('papers.papers_list') }}" class="btn btn-primary fw-semibold px-4">
+        <i class="bi bi-arrow-counterclockwise me-1"></i> सर्व प्रश्नपत्रिका दाखवा
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

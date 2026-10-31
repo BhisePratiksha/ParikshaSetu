@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}माझे निकाल व कार्यक्षमता — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <h1 class="h3 fw-bold text-white mb-1"><i class="bi bi-person-circle me-2"></i>विद्यार्थी डॅशबोर्ड व कार्यक्षमता (Candidate Analytics)</h1>
+        <small class="text-light opacity-90">{{ user.name if user else 'विद्यार्थी' }} ({{ user.email if user else '' }})</small>
+      </div>
+
+      <a href="{{ url_for('papers.papers_list') }}" class="btn btn-warning fw-bold text-dark">
+        <i class="bi bi-plus-circle me-1"></i> नवीन टेस्ट सोडवा
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Analytics Summary Metrics (Section 7) -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-primary">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">एकूण सोडवलेल्या चाचण्या</span>
+        <h2 class="fw-bold mb-0 text-primary">{{ total_tests }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-success">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">सरासरी गुण टक्केवारी</span>
+        <h2 class="fw-bold mb-0 text-success">{{ avg_score }}%</h2>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-warning">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">कमाल प्राप्त टक्केवारी</span>
+        <h2 class="fw-bold mb-0 text-warning">{{ highest_score }}%</h2>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-danger">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">सुधारणा आवश्यक विषय</span>
+        <h6 class="fw-bold mb-0 text-danger text-truncate">
+          {% if weak_subjects %}{{ weak_subjects|join(', ') }}{% else %}उत्कृष्ट तयारी!{% endif %}
+        </h6>
+      </div>
+    </div>
+  </div>
+
+  <!-- Past Test Attempts Table (Section 7) -->
+  <div class="custom-card p-4 bg-white mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold text-dark mb-0"><i class="bi bi-clock-history text-primary me-2"></i>मागील सोडवलेल्या चाचण्यांचा इतिहास</h4>
+      <span class="badge bg-secondary">{{ history|length }} रेकॉर्ड्स</span>
+    </div>
+
+    {% if history %}
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light small">
+            <tr>
+              <th>तारीख</th>
+              <th>परीक्षेचे नाव</th>
+              <th class="text-center">प्रश्नांची संख्या</th>
+              <th class="text-center">बरोबर / चूक</th>
+              <th class="text-center">वेळ</th>
+              <th class="text-center">टक्केवारी</th>
+              <th class="text-center">तपशील</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in history %}
+            <tr>
+              <td class="small text-muted">{{ h.submitted_at[:10] }}</td>
+              <td class="fw-bold text-dark">{{ h.paper_title }}</td>
+              <td class="text-center">{{ h.attempted }} / {{ h.total_questions }}</td>
+              <td class="text-center">
+                <span class="text-success fw-bold">{{ h.correct }}</span> / <span class="text-danger fw-bold">{{ h.incorrect }}</span>
+              </td>
+              <td class="text-center small text-muted">{{ h.time_taken_formatted }}</td>
+              <td class="text-center">
+                <span class="badge {% if h.percentage >= 70 %}bg-success{% elif h.percentage >= 45 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                  {{ h.percentage }}%
+                </span>
+              </td>
+              <td class="text-center">
+                <a href="{{ url_for('results.result_view', result_id=h.id) }}" class="btn btn-sm btn-outline-primary">
+                  निकाल पहा <i class="bi bi-arrow-right"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="p-4 text-center text-muted">
+        <i class="bi bi-journal-x fs-2 d-block mb-2"></i>
+        आपण अद्याप कोणतीही परीक्षा सोडवलेली नाही.
+        <div class="mt-3">
+          <a href="{{ url_for('papers.papers_list') }}" class="btn btn-primary fw-semibold">
+            प्रश्नपत्रिका सोडवणे सुरू करा
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

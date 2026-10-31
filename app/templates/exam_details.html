@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ exam.name_mr }} — अभ्यासक्रम व प्रश्नपत्रिका — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-2 small">
+        <li class="breadcrumb-item"><a href="{{ url_for('home.index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('exams.government_exams') }}" class="text-white-50 text-decoration-none">Govt Exams</a></li>
+        <li class="breadcrumb-item active text-warning" aria-current="page">{{ exam.name }}</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <h1 class="h2 fw-bold text-white mb-1">{{ exam.name_mr }}</h1>
+        <h6 class="text-light opacity-90 mb-0">{{ exam.name }} • <span class="badge badge-saffron">{{ exam.badge }}</span></h6>
+      </div>
+      <div>
+        <a href="{{ url_for('papers.papers_list', exam_id=exam.id) }}" class="btn btn-warning fw-bold text-dark">
+          <i class="bi bi-file-earmark-pdf me-1"></i> सर्व प्रश्नपत्रिका पहा
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    <!-- Left Column: Exam Details & Year-wise Papers -->
+    <div class="col-lg-8">
+      <!-- Exam Scheme Info Card -->
+      <div class="custom-card p-4 mb-4">
+        <h4 class="fw-bold mb-3 text-dark"><i class="bi bi-clipboard-data text-primary me-2"></i>परीक्षेचे स्वरूप व गुणदान पद्धती</h4>
+        <p class="text-muted">{{ exam.description_mr or exam.description }}</p>
+
+        <div class="row g-3 text-center my-2">
+          <div class="col-sm-3 col-6">
+            <div class="p-3 border rounded-3 bg-light">
+              <span class="d-block text-muted small">कालावधी</span>
+              <strong class="fs-5 text-dark">{{ exam.duration_minutes }} मिनिटे</strong>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="p-3 border rounded-3 bg-light">
+              <span class="d-block text-muted small">एकूण प्रश्न</span>
+              <strong class="fs-5 text-primary">{{ exam.total_questions }}</strong>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="p-3 border rounded-3 bg-light">
+              <span class="d-block text-muted small">एकूण गुण</span>
+              <strong class="fs-5 text-success">{{ exam.total_marks }}</strong>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="p-3 border rounded-3 bg-light">
+              <span class="d-block text-muted small">नकारात्मक गुण</span>
+              <strong class="fs-5 text-danger">{{ exam.negative_marks }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Year-Wise Question Papers (Section 3 Hierarchy) -->
+      <div class="custom-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-calendar-event text-danger me-2"></i>वर्षनिहाय सोडवलेल्या प्रश्नपत्रिका (PYQs)</h4>
+          <span class="badge bg-secondary">{{ years|length }} वर्षे उपलब्ध</span>
+        </div>
+        <p class="text-muted small mb-4">आपल्या आवडीचे वर्ष निवडून अधिकृत पेपर्स PDF मध्ये पहा किंवा थेट ऑनलाइन सोडवा.</p>
+
+        {% if years %}
+          {% for yr in years %}
+          <div class="mb-4">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <span class="badge bg-primary fs-6 px-3 py-1">{{ yr }} प्रश्नपत्रिका</span>
+              <div class="flex-grow-1 border-bottom"></div>
+            </div>
+
+            <div class="row g-3">
+              {% for p in papers_by_year[yr] %}
+              <div class="col-md-6">
+                <div class="border rounded-3 p-3 bg-light h-100 d-flex flex-column justify-content-between">
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="badge bg-white text-dark border">{{ p.district }}</span>
+                      <small class="text-muted">{{ p.shift }}</small>
+                    </div>
+                    <strong class="d-block text-dark mb-2">{{ p.title }}</strong>
+                    <small class="text-muted d-block mb-3">{{ p.total_questions }} प्रश्न • {{ p.duration_minutes }} मिनिटे</small>
+                  </div>
+
+                  <div class="d-flex gap-2">
+                    <a href="{{ url_for('papers.view_pdf', paper_id=p.id) }}" class="btn btn-sm btn-outline-primary flex-grow-1">
+                      <i class="bi bi-file-pdf"></i> PDF
+                    </a>
+                    <a href="{{ url_for('tests.solve_paper', paper_id=p.id) }}" class="btn btn-sm btn-success text-white fw-bold flex-grow-1">
+                      <i class="bi bi-play-circle"></i> सोडवा
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="alert alert-info d-flex align-items-center gap-2">
+            <i class="bi bi-info-circle fs-5"></i>
+            <div>या परीक्षेसाठी अधिकृत प्रश्नपत्रिका लवकरच अपलोड केल्या जातील.</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right Column: Associated Subjects for this Exam ONLY -->
+    <div class="col-lg-4">
+      <div class="custom-card p-4 sticky-top" style="top: 90px;">
+        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-book-half text-warning me-2"></i>या परीक्षेचे विषय (Subjects)</h5>
+        
+        {% if subjects %}
+          <div class="d-flex flex-column gap-3">
+            {% for s in subjects %}
+            <div class="p-3 border rounded-3 bg-light">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi {{ s.icon }} text-primary fs-5"></i>
+                <strong class="text-dark">{{ s.name_mr }}</strong>
+              </div>
+              <small class="text-muted d-block mb-2">{{ s.name }}</small>
+              <div class="d-flex flex-wrap gap-1">
+                {% for t in s.topics[:3] %}
+                  <span class="badge bg-white text-dark border small">{{ t }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="p-3 border rounded-3 bg-light text-center text-muted small">
+            <i class="bi bi-card-list fs-3 d-block mb-1"></i>
+            अभ्यासक्रम डेटाबेसद्वारे व्यवस्थापित केला जातो.
+          </div>
+        {% endif %}
+
+        <div class="mt-4 pt-3 border-top">
+          <a href="{{ url_for('papers.papers_list', exam_id=exam.id) }}" class="btn btn-primary w-100 fw-bold">
+            <i class="bi bi-search me-1"></i> प्रश्नपत्रिका फिल्टर करा
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

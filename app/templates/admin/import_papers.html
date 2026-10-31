@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}JSON Mock API आयात साधन — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1"><i class="bi bi-cloud-arrow-down-fill text-warning me-2"></i>JSON Mock API प्रश्नपत्रिका आयात साधन</h3>
+      <p class="text-muted small mb-0">स्थानिक <code>data/papers.json</code> फाईल किंवा बाह्य होस्ट केलेल्या API URL वरून प्रश्नपत्रिका मेटाडेटा थेट MongoDB मध्ये आयात करा.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> डॅशबोर्ड
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <!-- Import Controls -->
+    <div class="col-lg-6">
+      <div class="custom-card p-4 bg-white mb-4">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-download text-primary me-2"></i>डेटा आयात पर्याय (Import Source)</h5>
+
+        <form method="POST" action="{{ url_for('admin.import_papers') }}">
+          <!-- Option 1: Local Sample File -->
+          <div class="p-3 border rounded mb-3 bg-light">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="source_type" id="sourceLocal" value="local" checked>
+              <label class="form-check-label fw-bold text-dark" for="sourceLocal">
+                स्थानिक सॅम्पल फाईल (Local data/papers.json)
+              </label>
+            </div>
+            <p class="small text-muted mb-0 mt-1 ms-4">
+              प्रकल्प निर्देशिकेतील <code>data/papers.json</code> मधील प्रश्नपत्रिका आयात करण्यासाठी हा पर्याय निवडा. इंटरनेट जोडणी नसली तरीही कार्यरत राहते.
+            </p>
+          </div>
+
+          <!-- Option 2: External Configurable Mock API -->
+          <div class="p-3 border rounded mb-3 bg-light">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" name="source_type" id="sourceExternal" value="external">
+              <label class="form-check-label fw-bold text-dark" for="sourceExternal">
+                बाह्य होस्ट केलेले Mock API URL (External Endpoint)
+              </label>
+            </div>
+
+            <div class="ms-4">
+              <label class="form-label small fw-bold text-muted">API URL (Mocky / Vercel / GitHub Raw):</label>
+              <input type="url" name="api_url" class="form-control form-control-sm" placeholder="https://raw.githubusercontent.com/.../papers.json" value="{{ default_url }}">
+              <small class="text-muted d-block mt-1" style="font-size: 0.725rem;">
+                टीप: नेटवर्क विनंतीमध्ये टाईमआउट (Timeout 8s) व त्रुटी नियंत्रण (Error Handling) स्वयंचलितरित्या समाविष्ट आहे.
+              </small>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-warning fw-bold text-dark w-100 py-2 shadow-sm">
+            <i class="bi bi-arrow-repeat me-1"></i> डेटा आयात सुरू करा (Start Import / Refresh)
+          </button>
+        </form>
+      </div>
+
+      <!-- JSON Format Guideline (Section 4) -->
+      <div class="custom-card p-4 bg-white">
+        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-code-slash text-info me-2"></i>अपेक्षित JSON फॉरमॅट (Expected Schema):</h6>
+        <pre class="bg-light p-3 rounded small text-dark border overflow-auto" style="max-height: 220px; font-size: 0.75rem;"><code>{
+  "status": "success",
+  "total_papers": 2,
+  "papers": [
+    {
+      "id": "pb-2025-pune",
+      "exam_id": "police-bharti",
+      "year": 2025,
+      "district": "Pune Gramin",
+      "exam_type": "Police Constable",
+      "title": "Maharashtra Police Bharti 2025",
+      "pdf_url": "/static/uploads/sample.pdf",
+      "answer_key_url": null,
+      "total_questions": 100,
+      "duration_minutes": 90
+    }
+  ]
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- Import Logs & Broken Link Audits (Section 4 & 8) -->
+    <div class="col-lg-6">
+      <div class="custom-card p-4 bg-white h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold text-dark mb-0"><i class="bi bi-journal-text text-success me-2"></i>आयात नोंदी व स्थिती (Audit Logs)</h5>
+          <span class="badge bg-secondary">{{ logs|length }} नोंदी</span>
+        </div>
+        <p class="text-muted small mb-3">अयशस्वी आयात, चुकीचे JSON फॉरमॅट व नेटवर्क त्रुटींचे निरीक्षण करा.</p>
+
+        {% if logs %}
+          <div class="d-flex flex-column gap-3">
+            {% for l in logs %}
+            <div class="p-3 border rounded bg-light small">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="badge {% if l.status == 'success' %}bg-success{% elif l.status == 'timeout' %}bg-warning text-dark{% else %}bg-danger{% endif %} text-uppercase">
+                  {{ l.status }}
+                </span>
+                <span class="text-muted" style="font-size: 0.75rem;">{{ l.timestamp[:19].replace('T', ' ') }}</span>
+              </div>
+
+              <div class="text-muted text-truncate" style="font-size: 0.8rem;">
+                <strong>स्रोत:</strong> {{ l.url or l.source }}
+              </div>
+
+              {% if l.status == 'success' %}
+                <div class="text-success fw-semibold mt-1">
+                  <i class="bi bi-check-circle"></i> आयात केलेले: {{ l.imported_count }} | अद्ययावत: {{ l.updated_count }}
+                </div>
+              {% else %}
+                <div class="text-danger fw-semibold mt-1">
+                  <i class="bi bi-exclamation-octagon"></i> त्रुटी: {{ l.error }}
+                </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-center py-5 text-muted small">
+            <i class="bi bi-cloud-slash fs-2 d-block mb-2"></i>
+            कोणत्याही बाह्य API आयात नोंदी उपलब्ध नाहीत. वरील फॉर्म वापरून डेटा आयात करा.
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

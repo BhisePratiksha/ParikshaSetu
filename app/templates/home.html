@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}ParikshaSetu — महाराष्ट्र स्पर्धा परीक्षा व पोलीस भरती तयारी मंच{% endblock %}
+
+{% block content %}
+<!-- Hero Banner -->
+<section class="hero-section">
+  <div class="container py-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(255, 107, 0, 0.2); border: 1px solid rgba(255,107,0,0.4); color: #ffa800; font-size: 0.85rem; font-weight: 700;">
+          <i class="bi bi-patch-check-fill"></i> अधिकृत मागील वर्षांच्या प्रश्नपत्रिका व CBT सराव
+        </div>
+        <h1 class="display-5 fw-bold text-white mb-3" style="line-height: 1.2;">
+          महाराष्ट्रातील सर्व शासकीय स्पर्धा परीक्षांची <span style="color: #ff6b00;">अचूक व परिपूर्ण तयारी!</span>
+        </h1>
+        <p class="lead text-light mb-4 marathi-text opacity-90" style="font-size: 1.05rem;">
+          महाराष्ट्र पोलीस भरती, तलाठी भरती (TCS), MPSC गट ब व क संयुक्त पूर्व परीक्षा आणि ZP भरतीसाठी सोडवलेल्या प्रश्नपत्रिका, अचूक उत्तरतालिका, सविस्तर स्पष्टीकरणे आणि वेळेचे व्यवस्थापन शिकवणारे संगणकीय टेस्ट इंजिन.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3">
+          <a href="{{ url_for('subjects.police_bharti') }}" class="btn btn-lg px-4 py-2 fw-bold text-white shadow" style="background: linear-gradient(135deg, #ff6b00 0%, #ffa800 100%); border: none;">
+            <i class="bi bi-shield-shaded me-2"></i> पोलीस भरती कक्ष (Police Bharti)
+          </a>
+          <a href="{{ url_for('exams.government_exams') }}" class="btn btn-lg btn-outline-light px-4 py-2 fw-semibold">
+            <i class="bi bi-building me-2"></i> सर्व शासकीय परीक्षा (Govt Exams)
+          </a>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="p-4 rounded-4 shadow-lg text-dark" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.4);">
+          <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-stars text-warning me-1"></i> त्वरित सराव सुरू करा</h5>
+            <span class="badge badge-saffron">नवीन पॅटर्न</span>
+          </div>
+
+          <div class="d-flex flex-column gap-2 mb-3">
+            <a href="{{ url_for('tests.solve_paper', paper_id='pb-2025-pune') }}" class="p-3 border rounded-3 text-decoration-none d-flex justify-content-between align-items-center bg-light hover-shadow">
+              <div>
+                <strong class="d-block text-dark">पोलीस शिपाई - पुणे ग्रामीण २०२५</strong>
+                <small class="text-muted"><i class="bi bi-clock me-1"></i> ९० मिनिटे • १०० गुण</small>
+              </div>
+              <span class="btn btn-sm btn-primary fw-semibold">सुरू करा <i class="bi bi-arrow-right"></i></span>
+            </a>
+
+            <a href="{{ url_for('tests.solve_paper', paper_id='talathi-2023-shift1') }}" class="p-3 border rounded-3 text-decoration-none d-flex justify-content-between align-items-center bg-light hover-shadow">
+              <div>
+                <strong class="d-block text-dark">तलाठी भरती २०२३ (TCS Shift 1)</strong>
+                <small class="text-muted"><i class="bi bi-clock me-1"></i> १२० मिनिटे • २०० गुण</small>
+              </div>
+              <span class="btn btn-sm btn-outline-primary fw-semibold">सुरू करा <i class="bi bi-arrow-right"></i></span>
+            </a>
+          </div>
+
+          <div class="text-center small text-muted">
+            <i class="bi bi-shield-check text-success"></i> अधिकृत प्रश्न आणि सर्व्हरवरील अचूक उत्तरतालिका
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Counters -->
+<section class="py-4 bg-white border-bottom shadow-sm">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-md-3 col-6">
+        <h2 class="fw-bold mb-0 text-primary">{{ stats.total_exams }}</h2>
+        <span class="text-muted small fw-semibold">लक्ष्य शासकीय परीक्षा</span>
+      </div>
+      <div class="col-md-3 col-6">
+        <h2 class="fw-bold mb-0 text-danger">{{ stats.total_papers }}</h2>
+        <span class="text-muted small fw-semibold">उपलब्ध प्रश्नपत्रिका (PYQs)</span>
+      </div>
+      <div class="col-md-3 col-6">
+        <h2 class="fw-bold mb-0 text-success">{{ stats.total_questions }}+</h2>
+        <span class="text-muted small fw-semibold">सराव प्रश्न व स्पष्टीकरणे</span>
+      </div>
+      <div class="col-md-3 col-6">
+        <h2 class="fw-bold mb-0 text-warning">{{ stats.total_users }}+</h2>
+        <span class="text-muted small fw-semibold">नोंदणीकृत उमेदवार</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Police Bharti Highlight (Section 2 - First Main Tab) -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+      <div>
+        <span class="badge badge-saffron text-uppercase mb-2">मुख्य विभाग</span>
+        <h2 class="fw-bold mb-1">महाराष्ट्र पोलीस भरती विषय व सराव संच</h2>
+        <p class="text-muted mb-0">पोलीस शिपाई, चालक व SRPF साठी सर्व ५ विषयांची घटकनिहाय मांडणी</p>
+      </div>
+      <a href="{{ url_for('subjects.police_bharti') }}" class="btn btn-outline-dark fw-semibold">
+        सर्व विषय पहा <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      {% for sub in police_subjects %}
+      <div class="col-lg-4 col-md-6">
+        <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div style="width: 44px; height: 44px; border-radius: 10px; background: {{ sub.color }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                <i class="bi {{ sub.icon }}"></i>
+              </div>
+              <div>
+                <h5 class="fw-bold mb-0 text-dark">{{ sub.name_mr }}</h5>
+                <small class="text-muted">{{ sub.name }}</small>
+              </div>
+            </div>
+            <p class="small text-muted mb-3">{{ sub.description }}</p>
+            
+            <div class="mb-3">
+              <strong class="d-block small text-secondary mb-1">महत्त्वाचे घटक:</strong>
+              <div class="d-flex flex-wrap gap-1">
+                {% for topic in sub.topics[:3] %}
+                  <span class="badge bg-light text-dark border small">{{ topic }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+            <span class="small fw-semibold text-muted">भार: {{ sub.weightage_percent }}% गुण</span>
+            <a href="{{ url_for('subjects.subject_detail', subject_id=sub.id) }}" class="btn btn-sm btn-primary">
+              घटक व प्रश्न <i class="bi bi-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Government Exams Overview (Section 2 - Second Main Tab) -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+      <div>
+        <span class="badge badge-navy text-uppercase mb-2">सर्वसमावेशक कक्ष</span>
+        <h2 class="fw-bold mb-1">इतर शासकीय स्पर्धा परीक्षा (Government Exams)</h2>
+        <p class="text-muted mb-0">प्रत्येक परीक्षेचा स्वतंत्र अभ्यासक्रम, वर्षनिहाय प्रश्नपत्रिका व टेस्ट सिरीज</p>
+      </div>
+      <a href="{{ url_for('exams.government_exams') }}" class="btn btn-outline-primary fw-semibold">
+        सर्व परीक्षा सूची <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      {% for ex in exams[:6] %}
+      <div class="col-lg-4 col-md-6">
+        <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <span class="badge bg-light text-dark border">{{ ex.category }}</span>
+              <span class="badge badge-saffron">{{ ex.badge }}</span>
+            </div>
+            <h5 class="fw-bold text-dark mb-1">{{ ex.name_mr }}</h5>
+            <small class="text-muted d-block mb-3">{{ ex.name }}</small>
+            <p class="small text-muted mb-3">{{ ex.description }}</p>
+          </div>
+
+          <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+            <small class="text-muted"><i class="bi bi-clock me-1"></i> {{ ex.duration_minutes }} मिनिटे • {{ ex.total_marks }} गुण</small>
+            <a href="{{ url_for('exams.exam_details', exam_id=ex.id) }}" class="btn btn-sm btn-outline-dark fw-semibold">
+              तपशील व पेपर्स <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Recent PYQ Papers (Section 3) -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-2">
+      <div>
+        <span class="badge badge-saffron text-uppercase mb-2">सराव केंद्र</span>
+        <h2 class="fw-bold mb-1">नुकत्याच उपलब्ध झालेल्या प्रश्नपत्रिका (PYQs)</h2>
+        <p class="text-muted mb-0">PDF पहा, डाउनलोड करा किंवा संगणकावर प्रत्यक्ष परीक्षा द्या</p>
+      </div>
+      <a href="{{ url_for('papers.papers_list') }}" class="btn btn-outline-dark fw-semibold">
+        सर्व प्रश्नपत्रिका शोधा <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      {% for p in recent_papers %}
+      <div class="col-lg-4 col-md-6">
+        <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-dark text-white fw-bold">{{ p.year }}</span>
+              <span class="badge bg-light text-secondary border"><i class="bi bi-geo-alt"></i> {{ p.district }}</span>
+            </div>
+            <h6 class="fw-bold text-dark mb-2">{{ p.title }}</h6>
+            <div class="small text-muted mb-3">
+              <div><i class="bi bi-file-earmark-text me-1 text-primary"></i> संवर्ग: {{ p.exam_type }}</div>
+              <div><i class="bi bi-clock me-1 text-warning"></i> कालावधी: {{ p.duration_minutes }} मिनिटे ({{ p.total_questions }} प्रश्न)</div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-top">
+            <div class="d-flex gap-2 flex-wrap">
+              <a href="{{ url_for('papers.paper_detail', paper_id=p.id) }}" class="btn btn-sm btn-outline-secondary flex-grow-1">
+                <i class="bi bi-info-circle"></i> माहिती
+              </a>
+              <a href="{{ url_for('papers.view_pdf', paper_id=p.id) }}" class="btn btn-sm btn-outline-primary flex-grow-1">
+                <i class="bi bi-file-pdf"></i> PDF
+              </a>
+              <a href="{{ url_for('tests.solve_paper', paper_id=p.id) }}" class="btn btn-sm btn-success flex-grow-1 text-white fw-bold">
+                <i class="bi bi-play-circle"></i> सराव करा
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

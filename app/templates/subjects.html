@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ subject.name_mr }} — सराव व घटक — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #1e3a5f 0%, #0d233a 100%); border-bottom: 3px solid {{ subject.color }};">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-2 small">
+        <li class="breadcrumb-item"><a href="{{ url_for('home.index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('subjects.police_bharti') }}" class="text-white-50 text-decoration-none">Police Bharti</a></li>
+        <li class="breadcrumb-item active text-warning" aria-current="page">{{ subject.name_mr }}</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex align-items-center gap-3">
+      <div style="width: 50px; height: 50px; border-radius: 12px; background: {{ subject.color }}; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;">
+        <i class="bi {{ subject.icon }}"></i>
+      </div>
+      <div>
+        <h1 class="h2 fw-bold text-white mb-0">{{ subject.name_mr }}</h1>
+        <small class="text-light opacity-90">{{ subject.name }} • भार: {{ subject.weightage_percent }}% गुण</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    <!-- Topics & Outline -->
+    <div class="col-lg-4">
+      <div class="custom-card p-4 mb-4">
+        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-list-task text-primary me-2"></i>अभ्यासक्रम घटक (Topics)</h5>
+        <div class="list-group list-group-flush">
+          {% for t in subject.topics %}
+          <div class="list-group-item px-0 py-2 d-flex align-items-center gap-2">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            <span class="small fw-semibold">{{ t }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Related Papers -->
+      {% if related_papers %}
+      <div class="custom-card p-4">
+        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-file-earmark-text text-danger me-2"></i>उपयुक्त प्रश्नपत्रिका</h5>
+        <div class="d-flex flex-column gap-2">
+          {% for p in related_papers[:3] %}
+          <a href="{{ url_for('papers.paper_detail', paper_id=p.id) }}" class="p-2 border rounded text-decoration-none small text-dark d-block bg-light">
+            <strong>{{ p.title }}</strong>
+            <div class="text-muted" style="font-size: 0.75rem;">{{ p.year }} • {{ p.district }}</div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Practice Questions in this Subject -->
+    <div class="col-lg-8">
+      <div class="custom-card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-question-diamond-fill text-warning me-2"></i>घटकनिहाय सराव प्रश्न (Practice Questions)</h4>
+          <span class="badge bg-primary">{{ questions|length }} प्रश्न उपलब्ध</span>
+        </div>
+        <p class="text-muted small mb-4">प्रत्येक प्रश्नाचे योग्य उत्तर व सविस्तर स्पष्टीकरण तपासा.</p>
+
+        {% if questions %}
+          {% for q in questions %}
+          <div class="p-3 mb-3 border rounded-3 bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge badge-saffron">{{ q.topic }}</span>
+              <small class="text-muted">+{{ q.marks }} गुण</small>
+            </div>
+
+            <h6 class="fw-bold text-dark mb-3">{{ loop.index }}. {{ q.question_text }}</h6>
+            {% if q.question_text_en %}
+              <p class="small text-muted mb-3 fst-italic">{{ q.question_text_en }}</p>
+            {% endif %}
+
+            <div class="row g-2 mb-3">
+              {% for opt in q.options %}
+              <div class="col-sm-6">
+                <div class="p-2 border rounded bg-white small {% if loop.index0 == q.correct_index %}border-success bg-success-subtle fw-bold text-success{% endif %}">
+                  <span class="badge bg-secondary me-2">{{ ['A','B','C','D'][loop.index0] }}</span> {{ opt }}
+                  {% if loop.index0 == q.correct_index %}
+                    <i class="bi bi-check-circle-fill text-success ms-1"></i>
+                  {% endif %}
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="p-2 rounded bg-white border border-success-subtle small">
+              <strong class="text-success"><i class="bi bi-lightbulb-fill text-warning"></i> स्पष्टीकरण (Explanation):</strong>
+              <div class="text-muted mt-1">{{ q.explanation }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="alert alert-info">या विषयासाठी लवकरच नवीन प्रश्न जोडले जातील.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

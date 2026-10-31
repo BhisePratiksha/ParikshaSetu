@@ -1,0 +1,1295 @@
+{
+  "users": [
+    {
+      "name": "System Administrator",
+      "email": "admin@parikshasetu.com",
+      "password_hash": "scrypt:32768:8:1$d2sPSYdZV0imdERO$2a314ca2108ec6b2265afc0970e7700ac9cd278fcd22e4ce786290aad92877740ca2796b0f88af786e6b3ffd5ae4597e98576e8c8140ebc07fca783b9a5b6ea9",
+      "role": "admin",
+      "is_active": true,
+      "created_at": "2026-10-17T17:24:49.743096",
+      "_id": "b3b67e8a-7da9-4be0-8178-831489f3a4e4"
+    },
+    {
+      "name": "Rahul Patil (Demo Candidate)",
+      "email": "student@parikshasetu.com",
+      "password_hash": "scrypt:32768:8:1$nXbXfQQeHzD9KnIQ$4f313e412956f79650fe75480a45b7093c54c3a7b4766c6d6cbe5454bdbec924f1f4c58190f6964fe1ff5129b8b5e688394e22afb627c0c2bdbf006d47c694c0",
+      "role": "student",
+      "target_exam": "police-bharti",
+      "is_active": true,
+      "created_at": "2026-10-17T17:24:49.862899",
+      "_id": "23dbf6a7-6dfc-4ba4-a110-9c6565f46716"
+    }
+  ],
+  "exams": [
+    {
+      "id": "police-bharti",
+      "name": "Maharashtra Police Bharti",
+      "name_mr": "महाराष्ट्र पोलीस भरती",
+      "category": "Police & Security",
+      "badge": "State Police",
+      "description": "Recruitment for Maharashtra Police Constable, Driver Constable, SRPF, and Bandsman.",
+      "description_mr": "महाराष्ट्र पोलीस शिपाई, चालक, एसआरपीएफ व बॅण्डस्मन पदांसाठीची अधिकृत भरती परीक्षा.",
+      "duration_minutes": 90,
+      "total_questions": 100,
+      "total_marks": 100,
+      "negative_marks": 0.0,
+      "active": true,
+      "_id": "f00f3789-b43c-40fd-9b9a-538bded28139",
+      "created_at": "2026-10-17T17:24:49.863884",
+      "updated_at": "2026-10-31T19:22:09.821232"
+    },
+    {
+      "id": "mpsc",
+      "name": "MPSC Group B & C Combine",
+      "name_mr": "MPSC गट ब व गट क संयुक्त परीक्षा",
+      "category": "State Public Service",
+      "badge": "Gazetted & Non-Gazetted",
+      "description": "State recruitment for PSI, STI, ASO, Tax Assistant, and Sub-Registrar.",
+      "description_mr": "पोलीस उपनिरीक्षक (PSI), राज्य कर निरीक्षक (STI) व सहायक कक्ष अधिकारी (ASO) स्पर्धा परीक्षा.",
+      "duration_minutes": 60,
+      "total_questions": 100,
+      "total_marks": 100,
+      "negative_marks": 0.25,
+      "active": true,
+      "_id": "d583ed00-ed95-4133-8569-e2a00d70c1a6",
+      "created_at": "2026-10-17T17:24:49.865548",
+      "updated_at": "2026-10-31T19:22:09.822448"
+    },
+    {
+      "id": "talathi-bharti",
+      "name": "Maharashtra Talathi Bharti",
+      "name_mr": "महाराष्ट्र तलाठी भरती",
+      "category": "Revenue Department",
+      "badge": "TCS Pattern",
+      "description": "Revenue department examination for village revenue officers (Talathi) across Maharashtra districts.",
+      "description_mr": "महसूल व वन विभागांतर्गत तलाठी पदांसाठी टीसीएस (TCS) पॅटर्ननुसार घेण्यात येणारी परीक्षा.",
+      "duration_minutes": 120,
+      "total_questions": 100,
+      "total_marks": 200,
+      "negative_marks": 0.0,
+      "active": true,
+      "_id": "6329b536-dabe-4f48-84e2-f30c205ed8a3",
+      "created_at": "2026-10-17T17:24:49.866740",
+      "updated_at": "2026-10-31T19:22:09.823693"
+    },
+    {
+      "id": "zp-bharti",
+      "name": "Zilla Parishad (ZP) Bharti",
+      "name_mr": "जिल्हा परिषद भरती",
+      "category": "Rural Development",
+      "badge": "IBPS Pattern",
+      "description": "Recruitment for Gramsevak, Arogya Sevak, Health Worker, and Junior Clerks.",
+      "description_mr": "ग्रामसेवक, आरोग्य सेवक/सेविका व कनिष्ठ प्रशासन सहायक भरती परीक्षा.",
+      "duration_minutes": 120,
+      "total_questions": 100,
+      "total_marks": 200,
+      "negative_marks": 0.0,
+      "active": true,
+      "_id": "3564f661-6370-4f04-9d43-f3bf8aedb2db",
+      "created_at": "2026-10-17T17:24:49.867976",
+      "updated_at": "2026-10-31T19:22:09.825675"
+    },
+    {
+      "id": "ssc",
+      "name": "SSC (GD / CGL / CHSL)",
+      "name_mr": "कर्मचारी निवड आयोग (SSC)",
+      "category": "Central Government",
+      "badge": "Central Staff",
+      "description": "Central staff selection commission examinations for defense and central ministries.",
+      "description_mr": "केंद्रीय मंत्रालये व सशस्त्र दलांमधील विविध पदांसाठी राष्ट्रीय स्तरावरील परीक्षा.",
+      "duration_minutes": 60,
+      "total_questions": 80,
+      "total_marks": 160,
+      "negative_marks": 0.5,
+      "active": true,
+      "_id": "7b259ba5-cac6-48d0-acf5-63d123825e77",
+      "created_at": "2026-10-17T17:24:49.868871",
+      "updated_at": "2026-10-31T19:22:09.827984"
+    },
+    {
+      "id": "railway",
+      "name": "Railway Recruitment Board (RRB)",
+      "name_mr": "रेल्वे भरती बोर्ड (RRB ALP / NTPC)",
+      "category": "Central Railway",
+      "badge": "Indian Railways",
+      "description": "Indian Railways recruitment for NTPC, Assistant Loco Pilot (ALP), and Group D positions.",
+      "description_mr": "भारतीय रेल्वे अंतर्गत एनटीपीसी, लोको पायलट व ग्रुप-डी पदांसाठी भरती.",
+      "duration_minutes": 90,
+      "total_questions": 100,
+      "total_marks": 100,
+      "negative_marks": 0.33,
+      "active": true,
+      "_id": "c3b21cc2-727f-4a4c-b60c-411e695cff5d",
+      "created_at": "2026-10-17T17:24:49.869682",
+      "updated_at": "2026-10-31T19:22:09.829508"
+    },
+    {
+      "id": "banking",
+      "name": "Banking Exams (IBPS / SBI / RBI)",
+      "name_mr": "बँकिंग परीक्षा (IBPS / SBI / RBI)",
+      "category": "Financial Sector",
+      "badge": "Banking",
+      "description": "Probationary Officers (PO) and Clerical cadre recruitment across public sector banks.",
+      "description_mr": "सार्वजनिक क्षेत्रातील बँकांमधील प्रोबेशनरी ऑफिसर (PO) व लिपिक संवर्ग भरती.",
+      "duration_minutes": 60,
+      "total_questions": 100,
+      "total_marks": 100,
+      "negative_marks": 0.25,
+      "active": true,
+      "_id": "f38528ec-04a3-40a9-a9d3-aecb664d356e",
+      "created_at": "2026-10-17T17:24:49.870400",
+      "updated_at": "2026-10-31T19:22:09.830704"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "pb-marathi",
+      "exam_id": "police-bharti",
+      "name": "Marathi Grammar",
+      "name_mr": "मराठी व्याकरण",
+      "description": "वर्णविचार, नाम, सर्वनाम, विशेषण, क्रियापद, काळ, प्रयोग, समास, समानार्थी व विरुद्धार्थी शब्द.",
+      "icon": "bi-book-fill",
+      "color": "#6366F1",
+      "weightage_percent": 25,
+      "topics": [
+        "वर्णमाला व उच्चारस्थाने",
+        "शब्दांच्या जाती (नाम, सर्वनाम, विशेषण, क्रियापद)",
+        "विभक्ती व विभक्ती प्रत्यय",
+        "प्रयोग (कर्तरी, कर्मणी, भावे)",
+        "समास (अव्ययीभाव, तत्पुरुष, द्वंद्व, बहुव्रीही)",
+        "समानार्थी, विरुद्धार्थी व म्हणी"
+      ],
+      "_id": "e8d06e3e-5f38-40b4-b721-c8c480145f82",
+      "created_at": "2026-10-17T17:24:49.871169",
+      "updated_at": "2026-10-31T19:22:09.831864"
+    },
+    {
+      "id": "pb-gk",
+      "exam_id": "police-bharti",
+      "name": "General Knowledge",
+      "name_mr": "सामान्य ज्ञान व महाराष्ट्र इतिहास-भूगोल",
+      "description": "महाराष्ट्राचा इतिहास, भूगोल, राज्यघटना, पंचायत राज, विज्ञान आणि पोलीस प्रशासन.",
+      "icon": "bi-globe-americas",
+      "color": "#EC4899",
+      "weightage_percent": 25,
+      "topics": [
+        "महाराष्ट्राचा इतिहास व समाजसुधारक",
+        "महाराष्ट्राचा भूगोल (नद्या, पर्वत, जिल्हे)",
+        "भारतीय राज्यघटना व मूलभूत हक्क",
+        "पोलीस प्रशासन व गुप्तवार्ता विभाग (SID/CID)",
+        "सामान्य विज्ञान (भौतिक, रसायन, जीवशास्त्र)"
+      ],
+      "_id": "3b4636be-fbcf-4ddd-a23c-1484729c65c2",
+      "created_at": "2026-10-17T17:24:49.871878",
+      "updated_at": "2026-10-31T19:22:09.833056"
+    },
+    {
+      "id": "pb-current",
+      "exam_id": "police-bharti",
+      "name": "Current Affairs",
+      "name_mr": "चालू घडामोडी",
+      "description": "राष्ट्रीय व आंतरराष्ट्रीय महत्त्वाच्या घडामोडी, क्रीडा पुरस्कार, योजना आणि नियुक्त्या.",
+      "icon": "bi-newspaper",
+      "color": "#F59E0B",
+      "weightage_percent": 15,
+      "topics": [
+        "महाराष्ट्र राज्य शासनाच्या नवीन योजना",
+        "प्रमुख क्रीडा स्पर्धा व पदके (ऑलिम्पिक, क्रिकेट)",
+        "महत्त्वाचे राष्ट्रीय व आंतरराष्ट्रीय पुरस्कार",
+        "नवीन नियुक्त्या व पदाधिकारी"
+      ],
+      "_id": "6b3ec170-3a19-4681-8943-03739da8f72f",
+      "created_at": "2026-10-17T17:24:49.872703",
+      "updated_at": "2026-10-31T19:22:09.834191"
+    },
+    {
+      "id": "pb-reasoning",
+      "exam_id": "police-bharti",
+      "name": "Reasoning / Intelligence Test",
+      "name_mr": "बुद्धिमत्ता चाचणी",
+      "description": "संख्या मालिका, अक्षर मालिका, नातेसंबंध, दिशाज्ञान, घड्याळ व दिनदर्शिका.",
+      "icon": "bi-cpu-fill",
+      "color": "#10B981",
+      "weightage_percent": 15,
+      "topics": [
+        "संख्या व अक्षर मालिका (Series Completion)",
+        "नातेसंबंध व सांकेतिक भाषा (Coding-Decoding)",
+        "दिशाज्ञान चाचणी व बैठक व्यवस्था",
+        "घड्याळ व दिनदर्शिका (Calendar & Clock)",
+        "वेन आकृत्या व तार्किक निष्कर्ष"
+      ],
+      "_id": "f573386c-9567-4550-9e61-0a01f1b44edd",
+      "created_at": "2026-10-17T17:24:49.873432",
+      "updated_at": "2026-10-31T19:22:09.835365"
+    },
+    {
+      "id": "pb-math",
+      "exam_id": "police-bharti",
+      "name": "Arithmetic / Mathematics",
+      "name_mr": "अंकगणित",
+      "description": "संख्याज्ञान, लसावि-मसावि, सरासरी, शेकडेवारी, नफा-तोटा, काळ-काम-वेग आणि सरळव्याज.",
+      "icon": "bi-calculator-fill",
+      "color": "#FF6B00",
+      "weightage_percent": 20,
+      "topics": [
+        "संख्यांचे प्रकार, ल.सा.वि. व म.सा.वि.",
+        "शेकडेवारी व सरासरी",
+        "नफा आणि तोटा",
+        "काळ, काम आणि वेग (रेल्वे व अंतर)",
+        "सरळव्याज व चक्रवाढ व्याज"
+      ],
+      "_id": "ba66632a-4376-48e0-aa6f-837376d77823",
+      "created_at": "2026-10-17T17:24:49.873993",
+      "updated_at": "2026-10-31T19:22:09.836497"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q101",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-marathi",
+      "subject": "मराठी व्याकरण",
+      "topic": "प्रयोग (Prayog)",
+      "question_text": "‘रामाने रावणास मारले’ - या वाक्यातील प्रयोग ओळखा.",
+      "question_text_en": "Identify the \"Prayog\" in the sentence: \"Ramane Ravanas Marale\".",
+      "options": [
+        "कर्तरी प्रयोग",
+        "कर्मणी प्रयोग",
+        "भावे प्रयोग",
+        "मिश्र / संकर प्रयोग"
+      ],
+      "options_en": [
+        "Kartari Prayog",
+        "Karmani Prayog",
+        "Bhave Prayog",
+        "Mishra Prayog"
+      ],
+      "correct_answer": "भावे प्रयोग",
+      "correct_index": 2,
+      "explanation": "जेव्हा कर्त्याला व कर्माला दोघांनाही विभक्ती प्रत्यय असतो आणि क्रियापद तृतीयपुरुषी, नपुंसकलिंगी एकवचनी असते, तेव्हा \"सकर्मक भावे प्रयोग\" होतो.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "8ff315b6-8fb7-4694-854f-4be23717b398",
+      "created_at": "2026-10-17T17:24:49.874539",
+      "updated_at": "2026-10-31T19:22:09.837657"
+    },
+    {
+      "id": "q102",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-marathi",
+      "subject": "मराठी व्याकरण",
+      "topic": "समास (Samas)",
+      "question_text": "खालीलपैकी ‘यथाशक्ती’ या शब्दाचा समास कोणता आहे?",
+      "question_text_en": "Which type of Samas is the compound word \"Yathashakti\"?",
+      "options": [
+        "तत्पुरुष समास",
+        "अव्ययीभाव समास",
+        "द्वंद्व समास",
+        "बहुव्रीही समास"
+      ],
+      "options_en": [
+        "Tatpurusha Samas",
+        "Avyayibhava Samas",
+        "Dvandva Samas",
+        "Bahuvrihi Samas"
+      ],
+      "correct_answer": "अव्ययीभाव समास",
+      "correct_index": 1,
+      "explanation": "‘यथाशक्ती’ म्हणजे शक्तीप्रमाणे. यात पहिले पद अव्यय (यथा) असून संपूर्ण शब्द क्रियाविशेषणाचे काम करतो, म्हणून हा अव्ययीभाव समास आहे.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "4454bcba-dda7-4d31-94f5-aa74a398e7fa",
+      "created_at": "2026-10-17T17:24:49.875097",
+      "updated_at": "2026-10-31T19:22:09.838812"
+    },
+    {
+      "id": "q103",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-gk",
+      "subject": "सामान्य ज्ञान व पोलीस प्रशासन",
+      "topic": "पोलीस प्रशासन",
+      "question_text": "महाराष्ट्र राज्याच्या गुप्तवार्ता विभागाचे (State Intelligence Department - SID) मुख्यालय कुठे आहे?",
+      "question_text_en": "Where is the headquarters of the State Intelligence Department (SID) located?",
+      "options": [
+        "पुणे (Pune)",
+        "मुंबई (Mumbai)",
+        "नागपूर (Nagpur)",
+        "नाशिक (Nashik)"
+      ],
+      "options_en": [
+        "Pune",
+        "Mumbai",
+        "Nagpur",
+        "Nashik"
+      ],
+      "correct_answer": "मुंबई (Mumbai)",
+      "correct_index": 1,
+      "explanation": "महाराष्ट्र राज्य गुप्तवार्ता विभाग (SID) चे मुख्य कार्यालय मुंबई येथे आहे. गुन्हे अन्वेषण विभाग (CID) चे मुख्यालय पुणे येथे आहे.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "9c7d581a-6d6e-4ad5-9825-016667ac0a39",
+      "created_at": "2026-10-17T17:24:49.875665",
+      "updated_at": "2026-10-31T19:22:09.839978"
+    },
+    {
+      "id": "q104",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-gk",
+      "subject": "सामान्य ज्ञान",
+      "topic": "भारतीय राज्यघटना",
+      "question_text": "भारतीय राज्यघटनेत मूलभूत कर्तव्यांचा समावेश कोणत्या घटनादुरुस्ती कायद्याद्वारे करण्यात आला?",
+      "question_text_en": "Under which Constitutional Amendment were Fundamental Duties added to the Indian Constitution?",
+      "options": [
+        "४२ वी घटनादुरुस्ती १९७६",
+        "४४ वी घटनादुरुस्ती १९७८",
+        "५२ वी घटनादुरुस्ती १९८५",
+        "८६ वी घटनादुरुस्ती २००२"
+      ],
+      "options_en": [
+        "42nd Amendment 1976",
+        "44th Amendment 1978",
+        "52nd Amendment 1985",
+        "86th Amendment 2002"
+      ],
+      "correct_answer": "४२ वी घटनादुरुस्ती १९७६",
+      "correct_index": 0,
+      "explanation": "१९७६ च्या ४२ व्या घटनादुरुस्तीने स्वर्णसिंह समितीच्या शिफारशीनुसार राज्यघटनेत भाग IV-A आणि कलम ५१-A चा समावेश करून मूलभूत कर्तव्ये जोडली.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "8480dfbb-d4d4-4f41-9037-e1d39772c185",
+      "created_at": "2026-10-17T17:24:49.876276",
+      "updated_at": "2026-10-31T19:22:09.841137"
+    },
+    {
+      "id": "q105",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-math",
+      "subject": "अंकगणित",
+      "topic": "काळ, काम आणि वेग",
+      "question_text": "ताशी ६० किमी वेगाने धावणारी १८० मीटर लांबीची आगगाडी एका खांबाला किती सेकंदात ओलांडेल?",
+      "question_text_en": "In how many seconds will a 180m long train running at 60 km/h cross an electric pole?",
+      "options": [
+        "१०.२ सेकंद",
+        "१०.८ सेकंद",
+        "११.५ सेकंद",
+        "१२ सेकंद"
+      ],
+      "options_en": [
+        "10.2 Seconds",
+        "10.8 Seconds",
+        "11.5 Seconds",
+        "12 Seconds"
+      ],
+      "correct_answer": "१०.८ सेकंद",
+      "correct_index": 1,
+      "explanation": "वेग = ६० × (५/१८) = ५०/३ मीटर/सेकंद. वेळ = अंतर / वेग = १८० / (५०/३) = (१८० × ३) / ५० = ५४० / ५० = १०.८ सेकंद.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "c36350ad-683c-4732-922a-df230034dd60",
+      "created_at": "2026-10-17T17:24:49.876907",
+      "updated_at": "2026-10-31T19:22:09.842318"
+    },
+    {
+      "id": "q106",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-reasoning",
+      "subject": "बुद्धिमत्ता चाचणी",
+      "topic": "संख्या मालिका (Series)",
+      "question_text": "खालील संख्या मालिकेतील पुढील पद शोधा: ३, ७, १५, ३१, ६३, ?",
+      "question_text_en": "Find the next number in the series: 3, 7, 15, 31, 63, ?",
+      "options": [
+        "१२५",
+        "१२७",
+        "१२९",
+        "१३१"
+      ],
+      "options_en": [
+        "125",
+        "127",
+        "129",
+        "131"
+      ],
+      "correct_answer": "१२७",
+      "correct_index": 1,
+      "explanation": "पॅटर्न: (मागील संख्या × २) + १. म्हणून: (६३ × २) + १ = १२६ + १ = १२७.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "4f1c1c6d-a4fe-498f-81cd-091ef796374a",
+      "created_at": "2026-10-17T17:24:49.879272",
+      "updated_at": "2026-10-31T19:22:09.844071"
+    },
+    {
+      "id": "q107",
+      "exam_id": "police-bharti",
+      "subject_id": "pb-current",
+      "subject": "चालू घडामोडी",
+      "topic": "क्रीडा व पुरस्कार",
+      "question_text": "भारतात दरवर्षी ‘राष्ट्रीय क्रीडा दिन’ कोणत्या महान खेळाडूच्या स्मरणार्थ २९ ऑगस्ट रोजी साजरा केला जातो?",
+      "question_text_en": "National Sports Day is celebrated on August 29 in India in memory of which legendary athlete?",
+      "options": [
+        "मिल्खा सिंग",
+        "मेजर ध्यानचंद",
+        "के. डी. जाधव",
+        "सचिन तेंडुलकर"
+      ],
+      "options_en": [
+        "Milkha Singh",
+        "Major Dhyan Chand",
+        "K. D. Jadhav",
+        "Sachin Tendulkar"
+      ],
+      "correct_answer": "मेजर ध्यानचंद",
+      "correct_index": 1,
+      "explanation": "हॉकीचे जादूगार मेजर ध्यानचंद यांच्या जन्मदिनी (२९ ऑगस्ट) दरवर्षी राष्ट्रीय क्रीडा दिन साजरा करण्यात येतो.",
+      "marks": 1.0,
+      "negative_marks": 0.0,
+      "paper_id": "pb-2025-pune",
+      "_id": "2ed8a1ad-b140-4b29-ac99-c2fbb90e2554",
+      "created_at": "2026-10-17T17:24:49.880698",
+      "updated_at": "2026-10-31T19:22:09.845296"
+    }
+  ],
+  "papers": [
+    {
+      "id": "pb-2025-pune",
+      "exam_id": "police-bharti",
+      "year": 2025,
+      "district": "Pune Gramin",
+      "exam_type": "Police Constable",
+      "title": "Maharashtra Police Bharti 2025 - Pune Gramin Constable Paper",
+      "pdf_url": "/static/uploads/sample_police_pune_2025.pdf",
+      "answer_key_url": "/static/uploads/sample_police_pune_2025_key.pdf",
+      "total_questions": 100,
+      "duration_minutes": 90,
+      "total_marks": 100.0,
+      "negative_marks": 0.0,
+      "shift": "Morning Shift",
+      "_id": "6609dfb1-912a-4ac6-935e-e04deaa31d0a",
+      "created_at": "2026-10-17T17:24:49.882352",
+      "updated_at": "2026-10-31T19:22:09.846583",
+      "source": "local_file",
+      "last_imported_at": "2026-10-31T19:22:09.505337"
+    },
+    {
+      "id": "pb-2024-mumbai",
+      "exam_id": "police-bharti",
+      "year": 2024,
+      "district": "Mumbai City",
+      "exam_type": "Police Constable",
+      "title": "Maharashtra Police Bharti 2024 - Mumbai Commissionerate Constable Paper",
+      "pdf_url": "/static/uploads/sample_police_mumbai_2024.pdf",
+      "answer_key_url": "/static/uploads/sample_police_mumbai_2024_key.pdf",
+      "total_questions": 100,
+      "duration_minutes": 90,
+      "total_marks": 100.0,
+      "negative_marks": 0.0,
+      "shift": "General Shift",
+      "_id": "72e97149-9db8-4557-b59e-1cc4ec501846",
+      "created_at": "2026-10-17T17:24:49.883180",
+      "updated_at": "2026-10-31T19:22:09.847696",
+      "source": "local_file",
+      "last_imported_at": "2026-10-31T19:22:09.506441"
+    },
+    {
+      "id": "pb-2023-nagpur",
+      "exam_id": "police-bharti",
+      "year": 2023,
+      "district": "Nagpur Rural",
+      "exam_type": "Police Driver Constable",
+      "title": "Maharashtra Police Driver Constable 2023 - Nagpur Rural",
+      "pdf_url": null,
+      "answer_key_url": null,
+      "total_questions": 100,
+      "duration_minutes": 90,
+      "total_marks": 100.0,
+      "negative_marks": 0.0,
+      "shift": "Afternoon Shift",
+      "_id": "d8a8abab-d36e-40e0-a222-247e24209b5b",
+      "created_at": "2026-10-17T17:24:49.883894",
+      "updated_at": "2026-10-31T19:22:09.848876",
+      "source": "local_file",
+      "last_imported_at": "2026-10-31T19:22:09.507494"
+    },
+    {
+      "id": "talathi-2023-shift1",
+      "exam_id": "talathi-bharti",
+      "year": 2023,
+      "district": "Chhatrapati Sambhajinagar",
+      "exam_type": "Revenue Department",
+      "title": "Maharashtra Talathi Bharti 2023 - Shift 1 Solved Paper (TCS Pattern)",
+      "pdf_url": null,
+      "answer_key_url": null,
+      "total_questions": 100,
+      "duration_minutes": 120,
+      "total_marks": 200.0,
+      "negative_marks": 0.0,
+      "shift": "Shift 1",
+      "_id": "4bdb37c3-496e-4394-8865-0912b9e15119",
+      "created_at": "2026-10-17T17:24:49.884615",
+      "updated_at": "2026-10-31T19:22:09.850016",
+      "source": "local_file",
+      "last_imported_at": "2026-10-31T19:22:09.508536"
+    },
+    {
+      "id": "mpsc-combine-2024",
+      "exam_id": "mpsc",
+      "year": 2024,
+      "district": "State Level",
+      "exam_type": "Group B & C Non-Gazetted",
+      "title": "MPSC Group B & Group C Combined Prelims Exam 2024",
+      "pdf_url": null,
+      "answer_key_url": null,
+      "total_questions": 100,
+      "duration_minutes": 60,
+      "total_marks": 100.0,
+      "negative_marks": 0.25,
+      "shift": "Morning Shift",
+      "_id": "5148c2af-d016-4b12-86b0-51116b0dc213",
+      "created_at": "2026-10-17T17:24:49.885322",
+      "updated_at": "2026-10-31T19:22:09.851208",
+      "source": "local_file",
+      "last_imported_at": "2026-10-31T19:22:09.509914"
+    },
+    {
+      "id": "zp-gramsevak-2023",
+      "exam_id": "zp-bharti",
+      "year": 2023,
+      "district": "Nashik",
+      "exam_type": "Rural Development",
+      "title": "ZP Bharti 2023 - Gramsevak Official Question Paper (IBPS Pattern)",
+      "pdf_url": null,
+      "answer_key_url": null,
+      "total_questions": 100,
+      "duration_minutes": 120,
+      "total_marks": 200.0,
+      "negative_marks": 0.0,
+      "shift": "Shift 2",
+      "_id": "66317787-9d84-418b-b646-bfacf4133660",
+      "created_at": "2026-10-17T17:24:49.886046",
+      "updated_at": "2026-10-31T19:22:09.852367",
+      "source": "local_file",
+      "last_imported_at": "2026-10-31T19:22:09.511179"
+    }
+  ],
+  "results": [
+    {
+      "id": "73b90a58-b5fe-4596-9a84-158ade8a1fba",
+      "attempt_id": "test-attempt-1",
+      "user_id": "test-user-1",
+      "paper_id": null,
+      "paper_title": "Practice Paper",
+      "exam_id": "police-bharti",
+      "submitted_at": "2026-10-17T17:25:41.006800",
+      "total_questions": 7,
+      "attempted": 2,
+      "correct": 1,
+      "incorrect": 1,
+      "unattempted": 5,
+      "score": 1.0,
+      "max_marks": 7.0,
+      "percentage": 14.29,
+      "time_taken_seconds": 120,
+      "time_taken_formatted": "2m 0s",
+      "subject_breakdown": {
+        "मराठी व्याकरण": {
+          "total": 2,
+          "attempted": 2,
+          "correct": 1,
+          "incorrect": 1,
+          "marks_obtained": 1.0,
+          "max_marks": 2.0,
+          "percentage": 50.0
+        },
+        "सामान्य ज्ञान व पोलीस प्रशासन": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "सामान्य ज्ञान": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "अंकगणित": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "बुद्धिमत्ता चाचणी": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "चालू घडामोडी": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        }
+      },
+      "study_suggestions": [
+        "सखोल अभ्यासाची गरज आहे. विशेषतः पायाभूत नियम, सूत्रे आणि व्याकरण घटकांची पुन्हा उजळणी करा.",
+        "सुधारणा आवश्यक विषय: [मराठी व्याकरण, सामान्य ज्ञान व पोलीस प्रशासन, सामान्य ज्ञान, अंकगणित, बुद्धिमत्ता चाचणी, चालू घडामोडी]. या विषयांवर दररोज किमान ४५ मिनिटे विशेष सराव सत्र आयोजित करा.",
+        "परीक्षेत 'Elimination Technique' (पर्याय वगळणे पद्धत) वापरा ज्यामुळे संभ्रम कमी होऊन अचूकता वाढते."
+      ],
+      "questions_review": [
+        {
+          "id": "q101",
+          "subject": "मराठी व्याकरण",
+          "topic": "प्रयोग (Prayog)",
+          "question_text": "‘रामाने रावणास मारले’ - या वाक्यातील प्रयोग ओळखा.",
+          "options": [
+            "कर्तरी प्रयोग",
+            "कर्मणी प्रयोग",
+            "भावे प्रयोग",
+            "मिश्र / संकर प्रयोग"
+          ],
+          "user_choice_idx": 2,
+          "user_choice_text": "भावे प्रयोग",
+          "correct_index": 2,
+          "correct_answer": "भावे प्रयोग",
+          "is_attempted": true,
+          "is_correct": true,
+          "explanation": "जेव्हा कर्त्याला व कर्माला दोघांनाही विभक्ती प्रत्यय असतो आणि क्रियापद तृतीयपुरुषी, नपुंसकलिंगी एकवचनी असते, तेव्हा \"सकर्मक भावे प्रयोग\" होतो."
+        },
+        {
+          "id": "q102",
+          "subject": "मराठी व्याकरण",
+          "topic": "समास (Samas)",
+          "question_text": "खालीलपैकी ‘यथाशक्ती’ या शब्दाचा समास कोणता आहे?",
+          "options": [
+            "तत्पुरुष समास",
+            "अव्ययीभाव समास",
+            "द्वंद्व समास",
+            "बहुव्रीही समास"
+          ],
+          "user_choice_idx": 0,
+          "user_choice_text": "तत्पुरुष समास",
+          "correct_index": 1,
+          "correct_answer": "अव्ययीभाव समास",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "‘यथाशक्ती’ म्हणजे शक्तीप्रमाणे. यात पहिले पद अव्यय (यथा) असून संपूर्ण शब्द क्रियाविशेषणाचे काम करतो, म्हणून हा अव्ययीभाव समास आहे."
+        },
+        {
+          "id": "q103",
+          "subject": "सामान्य ज्ञान व पोलीस प्रशासन",
+          "topic": "पोलीस प्रशासन",
+          "question_text": "महाराष्ट्र राज्याच्या गुप्तवार्ता विभागाचे (State Intelligence Department - SID) मुख्यालय कुठे आहे?",
+          "options": [
+            "पुणे (Pune)",
+            "मुंबई (Mumbai)",
+            "नागपूर (Nagpur)",
+            "नाशिक (Nashik)"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "मुंबई (Mumbai)",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "महाराष्ट्र राज्य गुप्तवार्ता विभाग (SID) चे मुख्य कार्यालय मुंबई येथे आहे. गुन्हे अन्वेषण विभाग (CID) चे मुख्यालय पुणे येथे आहे."
+        },
+        {
+          "id": "q104",
+          "subject": "सामान्य ज्ञान",
+          "topic": "भारतीय राज्यघटना",
+          "question_text": "भारतीय राज्यघटनेत मूलभूत कर्तव्यांचा समावेश कोणत्या घटनादुरुस्ती कायद्याद्वारे करण्यात आला?",
+          "options": [
+            "४२ वी घटनादुरुस्ती १९७६",
+            "४४ वी घटनादुरुस्ती १९७८",
+            "५२ वी घटनादुरुस्ती १९८५",
+            "८६ वी घटनादुरुस्ती २००२"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 0,
+          "correct_answer": "४२ वी घटनादुरुस्ती १९७६",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "१९७६ च्या ४२ व्या घटनादुरुस्तीने स्वर्णसिंह समितीच्या शिफारशीनुसार राज्यघटनेत भाग IV-A आणि कलम ५१-A चा समावेश करून मूलभूत कर्तव्ये जोडली."
+        },
+        {
+          "id": "q105",
+          "subject": "अंकगणित",
+          "topic": "काळ, काम आणि वेग",
+          "question_text": "ताशी ६० किमी वेगाने धावणारी १८० मीटर लांबीची आगगाडी एका खांबाला किती सेकंदात ओलांडेल?",
+          "options": [
+            "१०.२ सेकंद",
+            "१०.८ सेकंद",
+            "११.५ सेकंद",
+            "१२ सेकंद"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "१०.८ सेकंद",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "वेग = ६० × (५/१८) = ५०/३ मीटर/सेकंद. वेळ = अंतर / वेग = १८० / (५०/३) = (१८० × ३) / ५० = ५४० / ५० = १०.८ सेकंद."
+        },
+        {
+          "id": "q106",
+          "subject": "बुद्धिमत्ता चाचणी",
+          "topic": "संख्या मालिका (Series)",
+          "question_text": "खालील संख्या मालिकेतील पुढील पद शोधा: ३, ७, १५, ३१, ६३, ?",
+          "options": [
+            "१२५",
+            "१२७",
+            "१२९",
+            "१३१"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "१२७",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "पॅटर्न: (मागील संख्या × २) + १. म्हणून: (६३ × २) + १ = १२६ + १ = १२७."
+        },
+        {
+          "id": "q107",
+          "subject": "चालू घडामोडी",
+          "topic": "क्रीडा व पुरस्कार",
+          "question_text": "भारतात दरवर्षी ‘राष्ट्रीय क्रीडा दिन’ कोणत्या महान खेळाडूच्या स्मरणार्थ २९ ऑगस्ट रोजी साजरा केला जातो?",
+          "options": [
+            "मिल्खा सिंग",
+            "मेजर ध्यानचंद",
+            "के. डी. जाधव",
+            "सचिन तेंडुलकर"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "मेजर ध्यानचंद",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "हॉकीचे जादूगार मेजर ध्यानचंद यांच्या जन्मदिनी (२९ ऑगस्ट) दरवर्षी राष्ट्रीय क्रीडा दिन साजरा करण्यात येतो."
+        }
+      ],
+      "_id": "28d0a941-cc80-473e-b27c-d3d650d00963",
+      "created_at": "2026-10-17T17:25:41.006840"
+    },
+    {
+      "id": "44262426-a55d-488f-a8b1-a77ead5c9cd5",
+      "attempt_id": "a489beed-a2bd-4036-a605-04f8b513171e",
+      "user_id": "guest",
+      "paper_id": "pb-2025-pune",
+      "paper_title": "Maharashtra Police Bharti 2025 - Pune Gramin Constable Paper",
+      "exam_id": "police-bharti",
+      "submitted_at": "2026-10-17T17:31:47.742834",
+      "total_questions": 7,
+      "attempted": 7,
+      "correct": 2,
+      "incorrect": 5,
+      "unattempted": 0,
+      "score": 2.0,
+      "max_marks": 7.0,
+      "percentage": 28.57,
+      "time_taken_seconds": 53,
+      "time_taken_formatted": "0m 53s",
+      "subject_breakdown": {
+        "मराठी व्याकरण": {
+          "total": 2,
+          "attempted": 2,
+          "correct": 0,
+          "incorrect": 2,
+          "marks_obtained": 0.0,
+          "max_marks": 2.0,
+          "percentage": 0.0
+        },
+        "सामान्य ज्ञान व पोलीस प्रशासन": {
+          "total": 1,
+          "attempted": 1,
+          "correct": 0,
+          "incorrect": 1,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "सामान्य ज्ञान": {
+          "total": 1,
+          "attempted": 1,
+          "correct": 0,
+          "incorrect": 1,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "अंकगणित": {
+          "total": 1,
+          "attempted": 1,
+          "correct": 1,
+          "incorrect": 0,
+          "marks_obtained": 1.0,
+          "max_marks": 1.0,
+          "percentage": 100.0
+        },
+        "बुद्धिमत्ता चाचणी": {
+          "total": 1,
+          "attempted": 1,
+          "correct": 0,
+          "incorrect": 1,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "चालू घडामोडी": {
+          "total": 1,
+          "attempted": 1,
+          "correct": 1,
+          "incorrect": 0,
+          "marks_obtained": 1.0,
+          "max_marks": 1.0,
+          "percentage": 100.0
+        }
+      },
+      "study_suggestions": [
+        "सखोल अभ्यासाची गरज आहे. विशेषतः पायाभूत नियम, सूत्रे आणि व्याकरण घटकांची पुन्हा उजळणी करा.",
+        "सुधारणा आवश्यक विषय: [मराठी व्याकरण, सामान्य ज्ञान व पोलीस प्रशासन, सामान्य ज्ञान, बुद्धिमत्ता चाचणी]. या विषयांवर दररोज किमान ४५ मिनिटे विशेष सराव सत्र आयोजित करा.",
+        "तुमची ताकद: [अंकगणित, चालू घडामोडी]. या घटकांमधील गती व अचूकता टिकवून ठेवा.",
+        "परीक्षेत 'Elimination Technique' (पर्याय वगळणे पद्धत) वापरा ज्यामुळे संभ्रम कमी होऊन अचूकता वाढते."
+      ],
+      "questions_review": [
+        {
+          "id": "q101",
+          "subject": "मराठी व्याकरण",
+          "topic": "प्रयोग (Prayog)",
+          "question_text": "‘रामाने रावणास मारले’ - या वाक्यातील प्रयोग ओळखा.",
+          "options": [
+            "कर्तरी प्रयोग",
+            "कर्मणी प्रयोग",
+            "भावे प्रयोग",
+            "मिश्र / संकर प्रयोग"
+          ],
+          "user_choice_idx": 1,
+          "user_choice_text": "कर्मणी प्रयोग",
+          "correct_index": 2,
+          "correct_answer": "भावे प्रयोग",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "जेव्हा कर्त्याला व कर्माला दोघांनाही विभक्ती प्रत्यय असतो आणि क्रियापद तृतीयपुरुषी, नपुंसकलिंगी एकवचनी असते, तेव्हा \"सकर्मक भावे प्रयोग\" होतो."
+        },
+        {
+          "id": "q102",
+          "subject": "मराठी व्याकरण",
+          "topic": "समास (Samas)",
+          "question_text": "खालीलपैकी ‘यथाशक्ती’ या शब्दाचा समास कोणता आहे?",
+          "options": [
+            "तत्पुरुष समास",
+            "अव्ययीभाव समास",
+            "द्वंद्व समास",
+            "बहुव्रीही समास"
+          ],
+          "user_choice_idx": 0,
+          "user_choice_text": "तत्पुरुष समास",
+          "correct_index": 1,
+          "correct_answer": "अव्ययीभाव समास",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "‘यथाशक्ती’ म्हणजे शक्तीप्रमाणे. यात पहिले पद अव्यय (यथा) असून संपूर्ण शब्द क्रियाविशेषणाचे काम करतो, म्हणून हा अव्ययीभाव समास आहे."
+        },
+        {
+          "id": "q103",
+          "subject": "सामान्य ज्ञान व पोलीस प्रशासन",
+          "topic": "पोलीस प्रशासन",
+          "question_text": "महाराष्ट्र राज्याच्या गुप्तवार्ता विभागाचे (State Intelligence Department - SID) मुख्यालय कुठे आहे?",
+          "options": [
+            "पुणे (Pune)",
+            "मुंबई (Mumbai)",
+            "नागपूर (Nagpur)",
+            "नाशिक (Nashik)"
+          ],
+          "user_choice_idx": 0,
+          "user_choice_text": "पुणे (Pune)",
+          "correct_index": 1,
+          "correct_answer": "मुंबई (Mumbai)",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "महाराष्ट्र राज्य गुप्तवार्ता विभाग (SID) चे मुख्य कार्यालय मुंबई येथे आहे. गुन्हे अन्वेषण विभाग (CID) चे मुख्यालय पुणे येथे आहे."
+        },
+        {
+          "id": "q104",
+          "subject": "सामान्य ज्ञान",
+          "topic": "भारतीय राज्यघटना",
+          "question_text": "भारतीय राज्यघटनेत मूलभूत कर्तव्यांचा समावेश कोणत्या घटनादुरुस्ती कायद्याद्वारे करण्यात आला?",
+          "options": [
+            "४२ वी घटनादुरुस्ती १९७६",
+            "४४ वी घटनादुरुस्ती १९७८",
+            "५२ वी घटनादुरुस्ती १९८५",
+            "८६ वी घटनादुरुस्ती २००२"
+          ],
+          "user_choice_idx": 1,
+          "user_choice_text": "४४ वी घटनादुरुस्ती १९७८",
+          "correct_index": 0,
+          "correct_answer": "४२ वी घटनादुरुस्ती १९७६",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "१९७६ च्या ४२ व्या घटनादुरुस्तीने स्वर्णसिंह समितीच्या शिफारशीनुसार राज्यघटनेत भाग IV-A आणि कलम ५१-A चा समावेश करून मूलभूत कर्तव्ये जोडली."
+        },
+        {
+          "id": "q105",
+          "subject": "अंकगणित",
+          "topic": "काळ, काम आणि वेग",
+          "question_text": "ताशी ६० किमी वेगाने धावणारी १८० मीटर लांबीची आगगाडी एका खांबाला किती सेकंदात ओलांडेल?",
+          "options": [
+            "१०.२ सेकंद",
+            "१०.८ सेकंद",
+            "११.५ सेकंद",
+            "१२ सेकंद"
+          ],
+          "user_choice_idx": 1,
+          "user_choice_text": "१०.८ सेकंद",
+          "correct_index": 1,
+          "correct_answer": "१०.८ सेकंद",
+          "is_attempted": true,
+          "is_correct": true,
+          "explanation": "वेग = ६० × (५/१८) = ५०/३ मीटर/सेकंद. वेळ = अंतर / वेग = १८० / (५०/३) = (१८० × ३) / ५० = ५४० / ५० = १०.८ सेकंद."
+        },
+        {
+          "id": "q106",
+          "subject": "बुद्धिमत्ता चाचणी",
+          "topic": "संख्या मालिका (Series)",
+          "question_text": "खालील संख्या मालिकेतील पुढील पद शोधा: ३, ७, १५, ३१, ६३, ?",
+          "options": [
+            "१२५",
+            "१२७",
+            "१२९",
+            "१३१"
+          ],
+          "user_choice_idx": 2,
+          "user_choice_text": "१२९",
+          "correct_index": 1,
+          "correct_answer": "१२७",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "पॅटर्न: (मागील संख्या × २) + १. म्हणून: (६३ × २) + १ = १२६ + १ = १२७."
+        },
+        {
+          "id": "q107",
+          "subject": "चालू घडामोडी",
+          "topic": "क्रीडा व पुरस्कार",
+          "question_text": "भारतात दरवर्षी ‘राष्ट्रीय क्रीडा दिन’ कोणत्या महान खेळाडूच्या स्मरणार्थ २९ ऑगस्ट रोजी साजरा केला जातो?",
+          "options": [
+            "मिल्खा सिंग",
+            "मेजर ध्यानचंद",
+            "के. डी. जाधव",
+            "सचिन तेंडुलकर"
+          ],
+          "user_choice_idx": 1,
+          "user_choice_text": "मेजर ध्यानचंद",
+          "correct_index": 1,
+          "correct_answer": "मेजर ध्यानचंद",
+          "is_attempted": true,
+          "is_correct": true,
+          "explanation": "हॉकीचे जादूगार मेजर ध्यानचंद यांच्या जन्मदिनी (२९ ऑगस्ट) दरवर्षी राष्ट्रीय क्रीडा दिन साजरा करण्यात येतो."
+        }
+      ],
+      "_id": "19efd9a6-1e96-4f17-8847-e37e93fa46e2",
+      "created_at": "2026-10-17T17:31:47.742880"
+    },
+    {
+      "id": "5b4050fc-59d9-4b36-8646-200b2d255388",
+      "attempt_id": "test-attempt-1",
+      "user_id": "test-user-1",
+      "paper_id": null,
+      "paper_title": "Practice Paper",
+      "exam_id": "police-bharti",
+      "submitted_at": "2026-10-31T19:22:09.818791",
+      "total_questions": 7,
+      "attempted": 2,
+      "correct": 1,
+      "incorrect": 1,
+      "unattempted": 5,
+      "score": 1.0,
+      "max_marks": 7.0,
+      "percentage": 14.29,
+      "time_taken_seconds": 120,
+      "time_taken_formatted": "2m 0s",
+      "subject_breakdown": {
+        "मराठी व्याकरण": {
+          "total": 2,
+          "attempted": 2,
+          "correct": 1,
+          "incorrect": 1,
+          "marks_obtained": 1.0,
+          "max_marks": 2.0,
+          "percentage": 50.0
+        },
+        "सामान्य ज्ञान व पोलीस प्रशासन": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "सामान्य ज्ञान": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "अंकगणित": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "बुद्धिमत्ता चाचणी": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        },
+        "चालू घडामोडी": {
+          "total": 1,
+          "attempted": 0,
+          "correct": 0,
+          "incorrect": 0,
+          "marks_obtained": 0.0,
+          "max_marks": 1.0,
+          "percentage": 0.0
+        }
+      },
+      "study_suggestions": [
+        "सखोल अभ्यासाची गरज आहे. विशेषतः पायाभूत नियम, सूत्रे आणि व्याकरण घटकांची पुन्हा उजळणी करा.",
+        "सुधारणा आवश्यक विषय: [मराठी व्याकरण, सामान्य ज्ञान व पोलीस प्रशासन, सामान्य ज्ञान, अंकगणित, बुद्धिमत्ता चाचणी, चालू घडामोडी]. या विषयांवर दररोज किमान ४५ मिनिटे विशेष सराव सत्र आयोजित करा.",
+        "परीक्षेत 'Elimination Technique' (पर्याय वगळणे पद्धत) वापरा ज्यामुळे संभ्रम कमी होऊन अचूकता वाढते."
+      ],
+      "questions_review": [
+        {
+          "id": "q101",
+          "subject": "मराठी व्याकरण",
+          "topic": "प्रयोग (Prayog)",
+          "question_text": "‘रामाने रावणास मारले’ - या वाक्यातील प्रयोग ओळखा.",
+          "options": [
+            "कर्तरी प्रयोग",
+            "कर्मणी प्रयोग",
+            "भावे प्रयोग",
+            "मिश्र / संकर प्रयोग"
+          ],
+          "user_choice_idx": 2,
+          "user_choice_text": "भावे प्रयोग",
+          "correct_index": 2,
+          "correct_answer": "भावे प्रयोग",
+          "is_attempted": true,
+          "is_correct": true,
+          "explanation": "जेव्हा कर्त्याला व कर्माला दोघांनाही विभक्ती प्रत्यय असतो आणि क्रियापद तृतीयपुरुषी, नपुंसकलिंगी एकवचनी असते, तेव्हा \"सकर्मक भावे प्रयोग\" होतो."
+        },
+        {
+          "id": "q102",
+          "subject": "मराठी व्याकरण",
+          "topic": "समास (Samas)",
+          "question_text": "खालीलपैकी ‘यथाशक्ती’ या शब्दाचा समास कोणता आहे?",
+          "options": [
+            "तत्पुरुष समास",
+            "अव्ययीभाव समास",
+            "द्वंद्व समास",
+            "बहुव्रीही समास"
+          ],
+          "user_choice_idx": 0,
+          "user_choice_text": "तत्पुरुष समास",
+          "correct_index": 1,
+          "correct_answer": "अव्ययीभाव समास",
+          "is_attempted": true,
+          "is_correct": false,
+          "explanation": "‘यथाशक्ती’ म्हणजे शक्तीप्रमाणे. यात पहिले पद अव्यय (यथा) असून संपूर्ण शब्द क्रियाविशेषणाचे काम करतो, म्हणून हा अव्ययीभाव समास आहे."
+        },
+        {
+          "id": "q103",
+          "subject": "सामान्य ज्ञान व पोलीस प्रशासन",
+          "topic": "पोलीस प्रशासन",
+          "question_text": "महाराष्ट्र राज्याच्या गुप्तवार्ता विभागाचे (State Intelligence Department - SID) मुख्यालय कुठे आहे?",
+          "options": [
+            "पुणे (Pune)",
+            "मुंबई (Mumbai)",
+            "नागपूर (Nagpur)",
+            "नाशिक (Nashik)"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "मुंबई (Mumbai)",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "महाराष्ट्र राज्य गुप्तवार्ता विभाग (SID) चे मुख्य कार्यालय मुंबई येथे आहे. गुन्हे अन्वेषण विभाग (CID) चे मुख्यालय पुणे येथे आहे."
+        },
+        {
+          "id": "q104",
+          "subject": "सामान्य ज्ञान",
+          "topic": "भारतीय राज्यघटना",
+          "question_text": "भारतीय राज्यघटनेत मूलभूत कर्तव्यांचा समावेश कोणत्या घटनादुरुस्ती कायद्याद्वारे करण्यात आला?",
+          "options": [
+            "४२ वी घटनादुरुस्ती १९७६",
+            "४४ वी घटनादुरुस्ती १९७८",
+            "५२ वी घटनादुरुस्ती १९८५",
+            "८६ वी घटनादुरुस्ती २००२"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 0,
+          "correct_answer": "४२ वी घटनादुरुस्ती १९७६",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "१९७६ च्या ४२ व्या घटनादुरुस्तीने स्वर्णसिंह समितीच्या शिफारशीनुसार राज्यघटनेत भाग IV-A आणि कलम ५१-A चा समावेश करून मूलभूत कर्तव्ये जोडली."
+        },
+        {
+          "id": "q105",
+          "subject": "अंकगणित",
+          "topic": "काळ, काम आणि वेग",
+          "question_text": "ताशी ६० किमी वेगाने धावणारी १८० मीटर लांबीची आगगाडी एका खांबाला किती सेकंदात ओलांडेल?",
+          "options": [
+            "१०.२ सेकंद",
+            "१०.८ सेकंद",
+            "११.५ सेकंद",
+            "१२ सेकंद"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "१०.८ सेकंद",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "वेग = ६० × (५/१८) = ५०/३ मीटर/सेकंद. वेळ = अंतर / वेग = १८० / (५०/३) = (१८० × ३) / ५० = ५४० / ५० = १०.८ सेकंद."
+        },
+        {
+          "id": "q106",
+          "subject": "बुद्धिमत्ता चाचणी",
+          "topic": "संख्या मालिका (Series)",
+          "question_text": "खालील संख्या मालिकेतील पुढील पद शोधा: ३, ७, १५, ३१, ६३, ?",
+          "options": [
+            "१२५",
+            "१२७",
+            "१२९",
+            "१३१"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "१२७",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "पॅटर्न: (मागील संख्या × २) + १. म्हणून: (६३ × २) + १ = १२६ + १ = १२७."
+        },
+        {
+          "id": "q107",
+          "subject": "चालू घडामोडी",
+          "topic": "क्रीडा व पुरस्कार",
+          "question_text": "भारतात दरवर्षी ‘राष्ट्रीय क्रीडा दिन’ कोणत्या महान खेळाडूच्या स्मरणार्थ २९ ऑगस्ट रोजी साजरा केला जातो?",
+          "options": [
+            "मिल्खा सिंग",
+            "मेजर ध्यानचंद",
+            "के. डी. जाधव",
+            "सचिन तेंडुलकर"
+          ],
+          "user_choice_idx": null,
+          "user_choice_text": null,
+          "correct_index": 1,
+          "correct_answer": "मेजर ध्यानचंद",
+          "is_attempted": false,
+          "is_correct": false,
+          "explanation": "हॉकीचे जादूगार मेजर ध्यानचंद यांच्या जन्मदिनी (२९ ऑगस्ट) दरवर्षी राष्ट्रीय क्रीडा दिन साजरा करण्यात येतो."
+        }
+      ],
+      "_id": "e95f6346-36ae-4b36-bd7e-29ed1f7cb747",
+      "created_at": "2026-10-31T19:22:09.818831"
+    }
+  ],
+  "test_attempts": [
+    {
+      "id": "2a529396-4be1-4efe-93e7-231607eaf016",
+      "user_id": "guest",
+      "paper_id": "pb-2025-pune",
+      "paper_title": "Maharashtra Police Bharti 2025 - Pune Gramin Constable Paper",
+      "exam_id": "police-bharti",
+      "started_at": "2026-10-17T17:25:41.058849",
+      "expires_at": "2026-10-17T18:55:41.058849",
+      "duration_minutes": 90,
+      "status": "in_progress",
+      "answers": {},
+      "_id": "d2f367a8-394f-4615-bf93-2df0bf784444",
+      "created_at": "2026-10-17T17:25:41.058876"
+    },
+    {
+      "id": "a489beed-a2bd-4036-a605-04f8b513171e",
+      "user_id": "guest",
+      "paper_id": "pb-2025-pune",
+      "paper_title": "Maharashtra Police Bharti 2025 - Pune Gramin Constable Paper",
+      "exam_id": "police-bharti",
+      "started_at": "2026-10-17T17:30:53.679670",
+      "expires_at": "2026-10-17T19:00:53.679670",
+      "duration_minutes": 90,
+      "status": "completed",
+      "answers": {},
+      "_id": "a24e3895-cbc8-44d7-997f-41b1c4fdb52b",
+      "created_at": "2026-10-17T17:30:53.679751",
+      "completed_at": "2026-10-17T17:31:47.750867",
+      "result_id": "44262426-a55d-488f-a8b1-a77ead5c9cd5",
+      "updated_at": "2026-10-17T17:31:47.750904"
+    },
+    {
+      "id": "517e7ccb-7a5e-4a4b-a72c-99680abb43eb",
+      "user_id": "guest",
+      "paper_id": "pb-2025-pune",
+      "paper_title": "Maharashtra Police Bharti 2025 - Pune Gramin Constable Paper",
+      "exam_id": "police-bharti",
+      "started_at": "2026-10-17T17:32:33.293897",
+      "expires_at": "2026-10-17T19:02:33.293897",
+      "duration_minutes": 90,
+      "status": "in_progress",
+      "answers": {},
+      "_id": "29abba8e-4c70-45e2-9693-090e94408647",
+      "created_at": "2026-10-17T17:32:33.293966"
+    },
+    {
+      "id": "5b9b69ab-e76d-4fc2-a0ee-872ec4acd9f9",
+      "user_id": "guest",
+      "paper_id": "pb-2025-pune",
+      "paper_title": "Maharashtra Police Bharti 2025 - Pune Gramin Constable Paper",
+      "exam_id": "police-bharti",
+      "started_at": "2026-10-31T19:22:09.861651",
+      "expires_at": "2026-10-31T20:52:09.861651",
+      "duration_minutes": 90,
+      "status": "in_progress",
+      "answers": {},
+      "_id": "40df2f8d-9f4d-407a-a0da-de45fb637265",
+      "created_at": "2026-10-31T19:22:09.861687"
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}विषय व घटक व्यवस्थापन — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1"><i class="bi bi-book text-info me-2"></i>विषय व घटक व्यवस्थापन (Subject & Topic Management)</h3>
+      <p class="text-muted small mb-0">परीक्षानिहाय विषय जोडा, घटक (Topics) प्रविष्ट करा आणि वेटेज ठरवा.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> डॅशबोर्डवर परत
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <!-- Add Subject Form -->
+    <div class="col-lg-4">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-plus-circle text-primary me-2"></i>नवीन विषय / घटक जोडा</h5>
+
+        <form method="POST" action="{{ url_for('admin.manage_subjects') }}">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">संबंधित परीक्षा (Select Exam)</label>
+            <select name="exam_id" class="form-select form-select-sm" required>
+              {% for ex in exams %}
+                <option value="{{ ex.id }}">{{ ex.name_mr }} ({{ ex.id }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">विषय ID (उदा. pb-marathi, mpsc-history)</label>
+            <input type="text" name="id" class="form-control form-control-sm" required placeholder="pb-marathi">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">विषयाचे नाव (मराठी)</label>
+            <input type="text" name="name_mr" class="form-control form-control-sm" required placeholder="मराठी व्याकरण">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">विषयाचे नाव (English)</label>
+            <input type="text" name="name" class="form-control form-control-sm" required placeholder="Marathi Grammar">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">समाविष्ट घटक (प्रत्येक ओळीत एक घटक)</label>
+            <textarea name="topics" class="form-control form-control-sm" rows="4" placeholder="प्रयोग&#10;समास&#10;विभक्ती&#10;काळ"></textarea>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">वेटेज (% गुण)</label>
+              <input type="number" name="weightage" class="form-control form-control-sm" value="25">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">रंग (Color)</label>
+              <input type="color" name="color" class="form-control form-control-color w-100" value="#6366F1">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 fw-bold">
+            <i class="bi bi-save me-1"></i> विषय जतन करा
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Existing Subjects List -->
+    <div class="col-lg-8">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3">उपलब्ध विषय सूची ({{ subjects|length }})</h5>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle small">
+            <thead class="table-light">
+              <tr>
+                <th>परीक्षा</th>
+                <th>विषयाचे नाव</th>
+                <th>घटक संख्या</th>
+                <th>वेटेज</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for s in subjects %}
+              <tr>
+                <td><span class="badge badge-navy">{{ s.exam_id }}</span></td>
+                <td>
+                  <strong class="d-block text-dark">{{ s.name_mr }}</strong>
+                  <span class="text-muted">{{ s.name }}</span>
+                </td>
+                <td>
+                  <span class="badge bg-light text-dark border">{{ s.topics|length }} घटक</span>
+                  <div class="text-muted small mt-1" style="font-size: 0.75rem;">
+                    {{ s.topics[:2]|join(', ') }}...
+                  </div>
+                </td>
+                <td><span class="badge bg-success-subtle text-success border border-success-subtle">{{ s.weightage_percent }}%</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

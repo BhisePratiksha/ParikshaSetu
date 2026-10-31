@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ paper.title }} — तपशील व सोडवा — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-2 small">
+        <li class="breadcrumb-item"><a href="{{ url_for('home.index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('papers.papers_list') }}" class="text-white-50 text-decoration-none">PYQ Papers</a></li>
+        <li class="breadcrumb-item active text-warning" aria-current="page">{{ paper.id }}</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <span class="badge badge-saffron mb-2">{{ exam.name_mr or paper.exam_id }}</span>
+        <h1 class="h3 fw-bold text-white mb-1">{{ paper.title }}</h1>
+        <small class="text-light opacity-90"><i class="bi bi-geo-alt me-1"></i> {{ paper.district }} • {{ paper.year }} • {{ paper.shift }}</small>
+      </div>
+      <div>
+        <a href="{{ url_for('tests.solve_paper', paper_id=paper.id) }}" class="btn btn-success btn-lg fw-bold text-white shadow">
+          <i class="bi bi-play-circle-fill me-1"></i> थेट परीक्षा सोडवा (Solve Online)
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    <!-- Paper Info & Metadata (Section 3) -->
+    <div class="col-lg-8">
+      <div class="custom-card p-4 mb-4">
+        <h4 class="fw-bold mb-3 text-dark"><i class="bi bi-info-circle text-primary me-2"></i>प्रश्नपत्रिकेचे तपशील (Paper Metadata)</h4>
+
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <tbody>
+              <tr>
+                <th class="bg-light text-muted w-25">परीक्षेचे नाव (Exam):</th>
+                <td class="fw-bold text-dark">{{ exam.name_mr if exam else paper.exam_id }} ({{ exam.name if exam else '' }})</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">संवर्ग / पद (Recruitment):</th>
+                <td>{{ paper.exam_type }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">वर्ष (Year):</th>
+                <td><span class="badge bg-dark">{{ paper.year }}</span></td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">जिल्हा / परीक्षा केंद्र:</th>
+                <td><i class="bi bi-geo-alt text-danger me-1"></i> {{ paper.district }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">सत्र / शिफ्ट (Shift):</th>
+                <td>{{ paper.shift }}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">एकूण प्रश्न व गुण:</th>
+                <td><strong>{{ paper.total_questions }} प्रश्न</strong> (कमाल गुण: {{ paper.total_marks }})</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">वेळ / कालावधी (Duration):</th>
+                <td><i class="bi bi-clock text-warning me-1"></i> {{ paper.duration_minutes }} मिनिटे</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">नकारात्मक गुण (Negative Marking):</th>
+                <td>{% if paper.negative_marks > 0 %}{{ paper.negative_marks }} गुण प्रति चुकीचे उत्तर{% else %}नाही (0.00){% endif %}</td>
+              </tr>
+              <tr>
+                <th class="bg-light text-muted">उत्तरतालिका (Answer Key):</th>
+                <td>
+                  {% if paper.answer_key_url %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">उपलब्ध (Available)</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted border">लवकरच उपलब्ध होईल</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Instructions Card -->
+      <div class="custom-card p-4">
+        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-shield-check text-success me-2"></i>परीक्षेसाठी महत्त्वाच्या सूचना</h5>
+        <ul class="text-muted small mb-0 d-flex flex-column gap-2">
+          <li>१. 'Solve Online' पर्यायाद्वारे आपण संगणकीय चाचणी (CBT Mock Test) प्रत्यक्ष वेळेत सोडवू शकता.</li>
+          <li>२. परीक्षेत एका वेळी एक प्रश्न दिसेल. आपण प्रश्न पॅलेट वापरून कोणत्याही प्रश्नावर थेट जाऊ शकता.</li>
+          <li>३. निगेटिव्ह मार्किंग लागू असल्यास चुकीच्या उत्तरासाठी गुण वजा केले जातील.</li>
+          <li>४. परीक्षा संपल्यावर लगेचच आपला अंतिम निकाल, अचूक उत्तरे व सविस्तर स्पष्टीकरणे पाहता येतील.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quick Action Card (Section 3: View PDF, Download PDF, View Answer Key, Solve Online) -->
+    <div class="col-lg-4">
+      <div class="custom-card p-4 sticky-top" style="top: 90px;">
+        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-gear-fill text-warning me-2"></i>उपलब्ध पर्याय (Actions)</h5>
+
+        <div class="d-grid gap-3">
+          <!-- 1. Solve Online -->
+          <a href="{{ url_for('tests.solve_paper', paper_id=paper.id) }}" class="btn btn-success btn-lg fw-bold text-white shadow-sm text-start p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <i class="bi bi-play-circle-fill fs-4 me-2 align-middle"></i>
+                <span>Solve Online (CBT)</span>
+              </div>
+              <i class="bi bi-chevron-right"></i>
+            </div>
+            <small class="d-block text-white-50 mt-1" style="font-size: 0.75rem;">वेळेच्या मर्यादेत प्रश्नपत्रिका सोडवा</small>
+          </a>
+
+          <!-- 2. View PDF -->
+          <a href="{{ url_for('papers.view_pdf', paper_id=paper.id) }}" class="btn btn-outline-primary btn-lg fw-semibold text-start p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <i class="bi bi-file-earmark-pdf-fill fs-4 me-2 align-middle text-danger"></i>
+                <span>View PDF (ब्राउझरमध्ये पहा)</span>
+              </div>
+              <i class="bi bi-chevron-right"></i>
+            </div>
+            <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">थेट इन-ब्राउझर व्ह्यूअरमध्ये प्रश्नपत्रिका उघडा</small>
+          </a>
+
+          <!-- 3. Download PDF -->
+          <a href="{{ url_for('papers.download_pdf', paper_id=paper.id) }}" class="btn btn-outline-secondary btn-lg fw-semibold text-start p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <i class="bi bi-download fs-4 me-2 align-middle text-primary"></i>
+                <span>Download PDF (डाऊनलोड)</span>
+              </div>
+              <i class="bi bi-chevron-right"></i>
+            </div>
+            <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">ऑफलाइन अभ्यासासाठी PDF सेव्ह करा</small>
+          </a>
+
+          <!-- 4. View Answer Key -->
+          {% if paper.answer_key_url %}
+            <a href="{{ url_for('papers.view_pdf', paper_id=paper.id, type='answer_key') }}" class="btn btn-outline-info btn-lg fw-semibold text-start p-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <i class="bi bi-key-fill fs-4 me-2 align-middle text-success"></i>
+                  <span>View Answer Key</span>
+                </div>
+                <i class="bi bi-chevron-right"></i>
+              </div>
+              <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">अधिकृत फायनल आन्सर की पहा</small>
+            </a>
+          {% else %}
+            <button class="btn btn-outline-light text-muted btn-lg text-start p-3" disabled>
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <i class="bi bi-key fs-4 me-2 align-middle"></i>
+                  <span>Answer Key Unavailable</span>
+                </div>
+              </div>
+              <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">उत्तरतालिका अद्याप अपलोड केलेली नाही</small>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

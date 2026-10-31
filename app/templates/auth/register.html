@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}नवीन उमेदवार नोंदणी (Register) — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+      <div class="custom-card p-4 p-md-5 bg-white">
+        <div class="text-center mb-4">
+          <div style="width: 50px; height: 50px; border-radius: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem;" class="mb-2">
+            <i class="bi bi-person-plus-fill"></i>
+          </div>
+          <h3 class="fw-bold text-dark">नवीन उमेदवार नोंदणी</h3>
+          <p class="text-muted small">मोफत खाते तयार करा व परीक्षा सराव सुरू करा</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.register') }}">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">उमेदवाराचे पूर्ण नाव (Full Name)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+              <input type="text" name="name" class="form-control" placeholder="उदा. राहुल पाटील" required autofocus>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">ईमेल आयडी (Email Address)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" class="form-control" placeholder="उदा. rahul@example.com" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">लक्ष्य परीक्षा (Target Examination)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-mortarboard"></i></span>
+              <select name="target_exam" class="form-select">
+                {% for ex in exams %}
+                  <option value="{{ ex.id }}">{{ ex.name_mr }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-muted">पासवर्ड (किमान ६ अक्षरे)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+              <input type="password" name="password" class="form-control" placeholder="••••••••" required minlength="6">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 fw-bold py-2 mb-3" style="background: linear-gradient(135deg, #ff6b00 0%, #ffa800 100%); border: none;">
+            खाते तयार करा (Register)
+          </button>
+        </form>
+
+        <div class="text-center small text-muted">
+          आधीच नोंदणी केली आहे का? <a href="{{ url_for('auth.login') }}" class="fw-bold text-primary text-decoration-none">येथे लॉगिन करा</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}पोलीस भरती विशेष तयारी कक्ष — ParikshaSetu{% endblock %}
+
+{% block content %}
+<!-- Section Header Banner -->
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #1e3a5f 0%, #0d233a 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <div style="width: 48px; height: 48px; border-radius: 12px; background: #ff6b00; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #fff;">
+        <i class="bi bi-shield-shaded"></i>
+      </div>
+      <div>
+        <h1 class="h2 fw-bold text-white mb-0">महाराष्ट्र पोलीस भरती २०२५-२०२६ विशेष सराव कक्ष</h1>
+        <span class="small text-warning marathi-text">पोलीस शिपाई, चालक शिपाई व SRPF सराव मंच</span>
+      </div>
+    </div>
+    <p class="text-light opacity-90 mb-0 small">
+      महाराष्ट्र पोलीस भरती लेखी परीक्षेसाठी अधिकृत अभ्यासक्रमानुसार सर्व ५ विषयांची सखोल मांडणी, घटकनिहाय प्रश्नसंच आणि मागील वर्षांच्या सोडवलेल्या प्रश्नपत्रिका.
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Subject Cards Grid (Dynamic from MongoDB) -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold mb-1"><i class="bi bi-collection text-primary me-2"></i>अभ्यासक्रमातील ५ अनिवार्य विषय</h3>
+      <p class="text-muted small mb-0">प्रत्येक घटकाचा सराव करा आणि टेस्ट सोडवा</p>
+    </div>
+    {% if session.get('user_role') == 'admin' %}
+      <a href="{{ url_for('admin.manage_subjects') }}" class="btn btn-sm btn-outline-dark">
+        <i class="bi bi-pencil-square"></i> विषय संपादित करा (Admin)
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="row g-4 mb-5">
+    {% for sub in subjects %}
+    <div class="col-lg-4 col-md-6">
+      <div class="custom-card p-4 h-100 d-flex flex-column justify-content-between">
+        <div>
+          <!-- Header -->
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center gap-3">
+              <div style="width: 46px; height: 46px; border-radius: 12px; background: {{ sub.color }}; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.35rem;">
+                <i class="bi {{ sub.icon }}"></i>
+              </div>
+              <div>
+                <h5 class="fw-bold mb-0 text-dark">{{ sub.name_mr }}</h5>
+                <small class="text-muted">{{ sub.name }}</small>
+              </div>
+            </div>
+            <span class="badge bg-light text-dark border">{{ sub.weightage_percent }}% गुण</span>
+          </div>
+
+          <p class="small text-muted mb-3">{{ sub.description }}</p>
+
+          <!-- Topics List -->
+          <div class="mb-3">
+            <strong class="d-block small text-secondary mb-2"><i class="bi bi-list-check me-1"></i>समाविष्ट महत्त्वाचे घटक (Topics):</strong>
+            <ul class="list-unstyled small mb-0">
+              {% for topic in sub.topics %}
+                <li class="mb-1 d-flex align-items-start gap-2">
+                  <i class="bi bi-check2-circle text-success mt-1"></i>
+                  <span>{{ topic }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-3 border-top mt-3 d-flex justify-content-between align-items-center">
+          <small class="text-muted"><i class="bi bi-question-circle me-1"></i> {{ sub.question_count }} प्रश्न उपलब्ध</small>
+          <a href="{{ url_for('subjects.subject_detail', subject_id=sub.id) }}" class="btn btn-sm btn-primary fw-semibold">
+            सराव सुरू करा <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Police Bharti Previous-Year Question Papers -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h3 class="fw-bold mb-1"><i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i>पोलीस भरती मागील वर्षांच्या प्रश्नपत्रिका</h3>
+        <p class="text-muted small mb-0">पुणे, मुंबई, नागपूर, ठाणे व इतर जिल्ह्यांचे मूळ पेपर्स</p>
+      </div>
+      <a href="{{ url_for('papers.papers_list', exam_id='police-bharti') }}" class="btn btn-outline-primary btn-sm fw-semibold">
+        सर्व पोलीस पेपर्स पहा <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="row g-3">
+      {% for p in papers %}
+      <div class="col-md-6 col-lg-4">
+        <div class="custom-card p-3 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-dark text-white">{{ p.year }}</span>
+              <span class="badge bg-light text-primary border"><i class="bi bi-geo-alt"></i> {{ p.district }}</span>
+            </div>
+            <h6 class="fw-bold text-dark mb-1">{{ p.title }}</h6>
+            <small class="text-muted d-block mb-3">{{ p.exam_type }} • {{ p.duration_minutes }} मिनिटे • {{ p.total_questions }} प्रश्न</small>
+          </div>
+
+          <div class="d-flex gap-2">
+            <a href="{{ url_for('papers.view_pdf', paper_id=p.id) }}" class="btn btn-sm btn-outline-primary flex-grow-1">
+              <i class="bi bi-file-pdf"></i> PDF पहा
+            </a>
+            <a href="{{ url_for('tests.solve_paper', paper_id=p.id) }}" class="btn btn-sm btn-success text-white fw-bold flex-grow-1">
+              <i class="bi bi-play-circle"></i> टेस्ट द्या
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

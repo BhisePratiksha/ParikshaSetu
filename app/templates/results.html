@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}निकाल व विश्लेषण — {{ result.paper_title }} — ParikshaSetu{% endblock %}
+
+{% block content %}
+<!-- Results Top Banner -->
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #10b981;">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <span class="badge bg-success mb-2"><i class="bi bi-check2-circle"></i> परीक्षा यशस्वीरित्या जमा झाली</span>
+        <h1 class="h3 fw-bold text-white mb-1">{{ result.paper_title }}</h1>
+        <small class="text-light opacity-90"><i class="bi bi-calendar3 me-1"></i> सबमिशन वेळ: {{ result.submitted_at[:16].replace('T', ' ') }} GMT • वेळ लागला: {{ result.time_taken_formatted }}</small>
+      </div>
+
+      <div class="d-flex gap-2">
+        <a href="{{ url_for('tests.solve_paper', paper_id=result.paper_id) }}" class="btn btn-outline-light btn-sm fw-semibold">
+          <i class="bi bi-arrow-counterclockwise"></i> पुन्हा सोडवा
+        </a>
+        <a href="{{ url_for('results.my_results') }}" class="btn btn-warning btn-sm fw-bold text-dark">
+          <i class="bi bi-person-lines-fill"></i> माझे सर्व निकाल
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Core Score Card Metrics (Section 7) -->
+  <div class="row g-3 mb-4">
+    <!-- Marks Obtained -->
+    <div class="col-lg-3 col-sm-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-primary">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">प्राप्त गुण (Score)</span>
+        <h2 class="fw-bold mb-0 text-primary">{{ result.score }} <span class="fs-6 text-muted">/ {{ result.max_marks }}</span></h2>
+        <span class="badge {% if result.percentage >= 70 %}bg-success{% elif result.percentage >= 45 %}bg-warning text-dark{% else %}bg-danger{% endif %} mt-2">
+          {{ result.percentage }}% अचूकता
+        </span>
+      </div>
+    </div>
+
+    <!-- Correct Answers -->
+    <div class="col-lg-3 col-sm-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-success">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">बरोबर उत्तरे (Correct)</span>
+        <h2 class="fw-bold mb-0 text-success">{{ result.correct }}</h2>
+        <small class="text-muted">{{ result.total_questions }} प्रश्नांपैकी</small>
+      </div>
+    </div>
+
+    <!-- Incorrect Answers -->
+    <div class="col-lg-3 col-sm-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-danger">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">चुकीची उत्तरे (Incorrect)</span>
+        <h2 class="fw-bold mb-0 text-danger">{{ result.incorrect }}</h2>
+        <small class="text-muted">नकारात्मक गुण लागू</small>
+      </div>
+    </div>
+
+    <!-- Unattempted Questions -->
+    <div class="col-lg-3 col-sm-6">
+      <div class="custom-card p-3 text-center bg-white border-top border-4 border-secondary">
+        <span class="text-muted small fw-bold text-uppercase d-block mb-1">न सोडवलेले (Skipped)</span>
+        <h2 class="fw-bold mb-0 text-secondary">{{ result.unattempted }}</h2>
+        <small class="text-muted">वेळ: {{ result.time_taken_formatted }}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mb-5">
+    <!-- Subject-Wise Performance Breakdown (Section 7) -->
+    <div class="col-lg-7">
+      <div class="custom-card p-4 h-100 bg-white">
+        <h4 class="fw-bold text-dark mb-3"><i class="bi bi-bar-chart-fill text-primary me-2"></i>विषयनिहाय कामगिरी (Subject Breakdown)</h4>
+        
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light small">
+              <tr>
+                <th>विषय (Subject)</th>
+                <th class="text-center">एकूण</th>
+                <th class="text-center">सोडवले</th>
+                <th class="text-center">बरोबर</th>
+                <th class="text-center">गुण</th>
+                <th class="text-center">अचूकता</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for subj, d in result.subject_breakdown.items() %}
+              <tr>
+                <td class="fw-bold text-dark">{{ subj }}</td>
+                <td class="text-center">{{ d.total }}</td>
+                <td class="text-center">{{ d.attempted }}</td>
+                <td class="text-center text-success fw-bold">{{ d.correct }}</td>
+                <td class="text-center fw-semibold">{{ d.marks_obtained }}</td>
+                <td class="text-center">
+                  <div class="d-flex align-items-center justify-content-center gap-1">
+                    <span class="badge {% if d.percentage >= 70 %}bg-success{% elif d.percentage >= 40 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                      {{ d.percentage }}%
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Study Suggestions (Section 7 - Rule Based, No fake AI claims) -->
+    <div class="col-lg-5">
+      <div class="custom-card p-4 h-100 bg-white">
+        <h4 class="fw-bold text-dark mb-3"><i class="bi bi-lightbulb-fill text-warning me-2"></i>अभ्यास मार्गदर्शन व सुधारणा (Study Tips)</h4>
+        
+        <div class="d-flex flex-column gap-3">
+          {% for tip in result.study_suggestions %}
+          <div class="p-3 border rounded-3 bg-light d-flex align-items-start gap-2">
+            <i class="bi bi-check2-circle text-primary fs-5 mt-0"></i>
+            <span class="small text-dark lh-base">{{ tip }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed Question Review & Explanations (Section 7) -->
+  <div class="custom-card p-4 bg-white">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold text-dark mb-0"><i class="bi bi-list-check text-success me-2"></i>प्रश्ननिहाय उत्तरतालिका व सविस्तर स्पष्टीकरणे</h4>
+      <span class="badge bg-secondary">{{ result.questions_review|length }} प्रश्न पुनरावलोकन</span>
+    </div>
+    <p class="text-muted small mb-4">आपण निवडलेले उत्तर आणि परीक्षेचे अधिकृत योग्य उत्तर खाली तपासा.</p>
+
+    {% for qr in result.questions_review %}
+    <div class="p-3 mb-3 border rounded-3 {% if qr.is_correct %}bg-success-subtle border-success{% elif qr.is_attempted %}bg-danger-subtle border-danger{% else %}bg-light border-secondary-subtle{% endif %}">
+      <!-- Status Badge Header -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-dark">प्रश्न {{ loop.index }}</span>
+          <span class="badge badge-navy">{{ qr.subject }}</span>
+          <span class="badge bg-white text-dark border">{{ qr.topic }}</span>
+        </div>
+
+        <div>
+          {% if qr.is_correct %}
+            <span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i> बरोबर (Correct)</span>
+          {% elif qr.is_attempted %}
+            <span class="badge bg-danger"><i class="bi bi-x-circle-fill me-1"></i> चूक (Incorrect)</span>
+          {% else %}
+            <span class="badge bg-secondary"><i class="bi bi-dash-circle me-1"></i> न सोडवलेला (Unattempted)</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Question Text -->
+      <h6 class="fw-bold text-dark mb-3">{{ qr.question_text }}</h6>
+
+      <!-- Options List -->
+      <div class="row g-2 mb-3">
+        {% for opt in qr.options %}
+          {% set is_user_choice = (loop.index0 == qr.user_choice_idx) %}
+          {% set is_actual_correct = (loop.index0 == qr.correct_index) %}
+          <div class="col-sm-6">
+            <div class="p-2 border rounded small bg-white 
+              {% if is_actual_correct %}border-success border-2 text-success fw-bold{% endif %}
+              {% if is_user_choice and not is_actual_correct %}border-danger border-2 text-danger fw-bold{% endif %}">
+              <span class="badge bg-light text-dark border me-1">{{ ['A','B','C','D'][loop.index0] }}</span>
+              {{ opt }}
+              {% if is_actual_correct %}
+                <span class="badge bg-success ms-1"><i class="bi bi-check"></i> योग्य उत्तर</span>
+              {% endif %}
+              {% if is_user_choice and not is_actual_correct %}
+                <span class="badge bg-danger ms-1"><i class="bi bi-x"></i> आपले उत्तर</span>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Verified Explanation -->
+      <div class="p-3 bg-white rounded border border-light-subtle small">
+        <strong class="text-primary"><i class="bi bi-info-circle-fill me-1"></i> सविस्तर स्पष्टीकरण (Explanation):</strong>
+        <p class="text-muted mb-0 mt-1">{{ qr.explanation }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

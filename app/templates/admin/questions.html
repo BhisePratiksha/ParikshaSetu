@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}प्रश्नसंच व्यवस्थापन (Question Bank) — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1"><i class="bi bi-question-square text-warning me-2"></i>प्रश्नसंच व्यवस्थापन (Question Bank Manager)</h3>
+      <p class="text-muted small mb-0">ऑनलाइन CBT सराव परीक्षेसाठी बहुपर्यायी प्रश्न (MCQ), पर्याय, अचूक उत्तर व स्पष्टीकरणे जोडा.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left"></i> डॅशबोर्ड
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <!-- Add Question Form -->
+    <div class="col-lg-5">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-plus-circle text-primary me-2"></i>नवीन प्रश्न प्रविष्ट करा</h5>
+
+        <form method="POST" action="{{ url_for('admin.manage_questions') }}">
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">परीक्षा (Exam)</label>
+              <select name="exam_id" class="form-select form-select-sm" required>
+                {% for ex in exams %}
+                  <option value="{{ ex.id }}">{{ ex.name_mr }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">विषय (Subject)</label>
+              <select name="subject_id" class="form-select form-select-sm" required>
+                {% for s in subjects %}
+                  <option value="{{ s.id }}">{{ s.name_mr }} ({{ s.exam_id }})</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">जोडलेली प्रश्नपत्रिका (Optional Paper)</label>
+            <select name="paper_id" class="form-select form-select-sm">
+              <option value="">कोणतीही प्रश्नपत्रिका (General Bank)</option>
+              {% for p in papers %}
+                <option value="{{ p.id }}">{{ p.title }} ({{ p.year }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">घटक / उपघटक (Topic)</label>
+            <input type="text" name="topic" class="form-control form-control-sm" required placeholder="उदा. प्रयोग, इतिहास, शेकडेवारी">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">प्रश्नाचा मजकूर (मराठीत)</label>
+            <textarea name="question_text" class="form-control form-control-sm" rows="3" required placeholder="उदा. खालीलपैकी 'यथाशक्ती' या शब्दाचा समास कोणता आहे?"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">प्रश्नाचा मजकूर (English - ऐच्छिक)</label>
+            <input type="text" name="question_text_en" class="form-control form-control-sm" placeholder="Optional English translation">
+          </div>
+
+          <div class="mb-3 p-3 bg-light rounded border">
+            <label class="form-label small fw-bold text-dark mb-2">पर्याय (Options A, B, C, D):</label>
+            <div class="mb-2"><input type="text" name="option_a" class="form-control form-control-sm" placeholder="पर्याय A" required></div>
+            <div class="mb-2"><input type="text" name="option_b" class="form-control form-control-sm" placeholder="पर्याय B" required></div>
+            <div class="mb-2"><input type="text" name="option_c" class="form-control form-control-sm" placeholder="पर्याय C" required></div>
+            <div class="mb-2"><input type="text" name="option_d" class="form-control form-control-sm" placeholder="पर्याय D" required></div>
+
+            <label class="form-label small fw-bold text-success mt-2">अचूक उत्तर (Correct Option):</label>
+            <select name="correct_index" class="form-select form-select-sm border-success">
+              <option value="0">पर्याय A योग्य आहे</option>
+              <option value="1">पर्याय B योग्य आहे</option>
+              <option value="2">पर्याय C योग्य आहे</option>
+              <option value="3">पर्याय D योग्य आहे</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">सविस्तर स्पष्टीकरण (Explanation for Answer Review)</label>
+            <textarea name="explanation" class="form-control form-control-sm" rows="2" placeholder="हे उत्तर बरोबर का आहे याचे नियम किंवा सूत्र..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-warning w-100 fw-bold text-dark">
+            <i class="bi bi-save me-1"></i> प्रश्न जतन करा
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Question List -->
+    <div class="col-lg-7">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3">प्रश्नसंच यादी (Question Bank)</h5>
+
+        <div class="d-flex flex-column gap-3 overflow-auto" style="max-height: 750px;">
+          {% for q in questions %}
+          <div class="p-3 border rounded-3 bg-light small">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="badge badge-navy">{{ q.subject }}</span>
+              <span class="badge bg-secondary">{{ q.topic }}</span>
+            </div>
+            <strong class="d-block text-dark mb-2">{{ loop.index }}. {{ q.question_text }}</strong>
+            <div class="row g-1 text-muted mb-2" style="font-size: 0.8rem;">
+              {% for opt in q.options %}
+              <div class="col-6">
+                <span class="{% if loop.index0 == q.correct_index %}text-success fw-bold{% endif %}">
+                  {{ ['A','B','C','D'][loop.index0] }}. {{ opt }}
+                  {% if loop.index0 == q.correct_index %}<i class="bi bi-check-circle-fill"></i>{% endif %}
+                </span>
+              </div>
+              {% endfor %}
+            </div>
+            {% if q.explanation %}
+              <div class="text-muted" style="font-size: 0.75rem;"><strong>स्पष्टीकरण:</strong> {{ q.explanation }}</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
