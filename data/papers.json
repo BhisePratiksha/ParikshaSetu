@@ -1,7 +1,22 @@
 {
   "status": "success",
-  "total_papers": 6,
+  "total_papers": 7,
   "papers": [
+    {
+      "id": "pb-2025-yavatmal",
+      "exam_id": "police-bharti",
+      "year": 2025,
+      "district": "Yavatmal",
+      "exam_type": "Police Constable",
+      "title": "Maharashtra Police Bharti 2025 - Yavatmal District Solved Paper",
+      "pdf_url": "/static/uploads/pdfs/police-bharti_2025_59670129_Yavatmal_Police_Bharti_Question_Paper_2026_-_Question_Paper_-_MahaSarav.pdf",
+      "answer_key_url": "/static/uploads/pdfs/police-bharti_2025_59670129_Yavatmal_Police_Bharti_Question_Paper_2026_-_Question_Paper_-_MahaSarav.pdf",
+      "total_questions": 100,
+      "duration_minutes": 90,
+      "total_marks": 100.0,
+      "negative_marks": 0.0,
+      "shift": "Morning Shift"
+    },
     {
       "id": "pb-2025-pune",
       "exam_id": "police-bharti",

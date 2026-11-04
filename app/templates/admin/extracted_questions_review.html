@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}PDF प्रश्न निष्कर्षण पूर्वावलोकन व पडताळणी — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <!-- Top Bar -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-1 small">
+          <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a></li>
+          <li class="breadcrumb-item"><a href="{{ url_for('admin.manage_papers') }}">Papers Manager</a></li>
+          <li class="breadcrumb-item active text-warning" aria-current="page">Review & Verification</li>
+        </ol>
+      </nav>
+      <h3 class="fw-bold text-dark mb-0">
+        <i class="bi bi-file-earmark-check-fill text-success me-2"></i>PDF निष्कर्षण पूर्वावलोकन व पडताळणी (Question Review)
+      </h3>
+      <p class="text-muted small mb-0">{{ paper.title }} ({{ paper.year }} • {{ paper.district }})</p>
+    </div>
+    <div class="d-flex gap-2">
+      <form method="POST" action="{{ url_for('admin.publish_paper_questions', paper_id=paper.id) }}" class="d-inline">
+        <button type="submit" class="btn btn-success fw-bold">
+          <i class="bi bi-check2-all me-1"></i> सर्व प्रश्न प्रकाशित करा (Approve & Publish All)
+        </button>
+      </form>
+      <form method="POST" action="{{ url_for('admin.extract_paper', paper_id=paper.id) }}" class="d-inline" onsubmit="return confirm('पुन्हा निष्कर्षण केल्यास सध्याचे बदल बदलले जाऊ शकतात. सुरू ठेवायचे?');">
+        <button type="submit" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-repeat me-1"></i> पुन्हा निष्कर्षित करा (Re-extract)
+        </button>
+      </form>
+      <a href="{{ url_for('papers.view_solutions', paper_id=paper.id) }}" target="_blank" class="btn btn-warning fw-bold text-dark">
+        <i class="bi bi-eye me-1"></i> विद्यार्थी दृश्य पहा (Student View)
+      </a>
+      <a href="{{ url_for('admin.manage_papers') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> परत
+      </a>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="custom-card p-3 bg-white">
+        <span class="text-muted small d-block">एकूण निष्कर्षित प्रश्न</span>
+        <h3 class="fw-bold text-dark mb-0">{{ questions|length }}</h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="custom-card p-3 bg-white">
+        <span class="text-muted small d-block">अधिकृत उत्तरतालिका जुळणी</span>
+        <h3 class="fw-bold text-success mb-0">
+          {{ questions|selectattr('answer_source', 'equalto', 'Official Answer Key')|list|length }}
+        </h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="custom-card p-3 bg-white">
+        <span class="text-muted small d-block">AI-Verified उत्तरे</span>
+        <h3 class="fw-bold text-warning mb-0">
+          {{ questions|selectattr('answer_source', 'equalto', 'AI-verified')|list|length }}
+        </h3>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="custom-card p-3 bg-white">
+        <span class="text-muted small d-block">सद्य स्थिती</span>
+        <h3 class="fw-bold text-primary mb-0">
+          <span class="badge bg-success">Published / Ready</span>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Questions Review Table & Edit Forms -->
+  <div class="custom-card p-4 bg-white">
+    <h5 class="fw-bold mb-3 text-dark">सर्व प्रश्नांची पडताळणी व संपादन (Review & Edit Questions)</h5>
+    <p class="text-muted small mb-4">प्रशासक येथे प्रत्येक प्रश्नाचा मजकूर, पर्याय A, B, C, D, अचूक उत्तर आणि स्पष्टीकरण तपासू व संपादित करू शकतात.</p>
+
+    {% for q in questions %}
+    <div class="border rounded-3 p-4 mb-4 bg-light" id="card-{{ q.id }}">
+      <form method="POST" action="{{ url_for('admin.edit_question', q_id=q.id) }}">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-dark fs-6 px-3 py-1">प्रश्न क्र. {{ q.question_number or loop.index }}</span>
+            <input type="hidden" name="question_number" value="{{ q.question_number or loop.index }}">
+            <span class="badge badge-navy">{{ q.subject }}</span>
+            {% if q.answer_source == 'Official Answer Key' %}
+              <span class="badge bg-success text-white"><i class="bi bi-shield-check me-1"></i>Official Key</span>
+            {% elif q.answer_source == 'Admin Verified' %}
+              <span class="badge bg-info text-dark"><i class="bi bi-patch-check me-1"></i>Admin Verified</span>
+            {% else %}
+              <span class="badge bg-warning text-dark"><i class="bi bi-robot me-1"></i>AI-Verified</span>
+            {% endif %}
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-sm btn-primary fw-semibold">
+              <i class="bi bi-save me-1"></i> बदल जतन करा (Save)
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="if(confirm('हा प्रश्न कायमचा हटवायचा आहे का?')) document.getElementById('del-form-{{ q.id }}').submit();">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-8">
+            <label class="form-label small fw-bold text-muted">प्रश्नाचा मजकूर (Question Text):</label>
+            <textarea name="question_text" class="form-control form-control-sm" rows="3" required>{{ q.question_text }}</textarea>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-bold text-muted">विषय (Subject):</label>
+            <select name="subject_id" class="form-select form-select-sm mb-2">
+              {% for s in subjects %}
+                <option value="{{ s.id }}" {% if q.subject_id == s.id %}selected{% endif %}>{{ s.name_mr }}</option>
+              {% endfor %}
+            </select>
+            <label class="form-label small fw-bold text-muted">घटक (Topic):</label>
+            <input type="text" name="topic" class="form-control form-control-sm" value="{{ q.topic }}">
+          </div>
+        </div>
+
+        <!-- 4 Options Inputs -->
+        <div class="row g-2 mb-3 p-3 bg-white rounded border">
+          <label class="form-label small fw-bold text-dark mb-1 col-12">पर्याय (Options A, B, C, D) व अचूक पर्याय:</label>
+          <div class="col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text fw-bold {% if q.correct_index == 0 %}bg-success text-white{% endif %}">A</span>
+              <input type="text" name="option_a" class="form-control" value="{{ q.options[0] if q.options|length > 0 else '' }}" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text fw-bold {% if q.correct_index == 1 %}bg-success text-white{% endif %}">B</span>
+              <input type="text" name="option_b" class="form-control" value="{{ q.options[1] if q.options|length > 1 else '' }}" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text fw-bold {% if q.correct_index == 2 %}bg-success text-white{% endif %}">C</span>
+              <input type="text" name="option_c" class="form-control" value="{{ q.options[2] if q.options|length > 2 else '' }}" required>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text fw-bold {% if q.correct_index == 3 %}bg-success text-white{% endif %}">D</span>
+              <input type="text" name="option_d" class="form-control" value="{{ q.options[3] if q.options|length > 3 else '' }}" required>
+            </div>
+          </div>
+          <div class="col-12 mt-2">
+            <div class="d-flex align-items-center gap-2">
+              <label class="small fw-bold text-success mb-0">योग्य पर्याय निवडा:</label>
+              <select name="correct_index" class="form-select form-select-sm border-success w-auto">
+                <option value="0" {% if q.correct_index == 0 %}selected{% endif %}>पर्याय A योग्य आहे</option>
+                <option value="1" {% if q.correct_index == 1 %}selected{% endif %}>पर्याय B योग्य आहे</option>
+                <option value="2" {% if q.correct_index == 2 %}selected{% endif %}>पर्याय C योग्य आहे</option>
+                <option value="3" {% if q.correct_index == 3 %}selected{% endif %}>पर्याय D योग्य आहे</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explanation Input -->
+        <div class="mb-2">
+          <label class="form-label small fw-bold text-success">सविस्तर स्पष्टीकरण (Detailed Explanation):</label>
+          <textarea name="explanation" class="form-control form-control-sm" rows="2">{{ q.explanation }}</textarea>
+        </div>
+      </form>
+
+      <!-- Hidden delete form -->
+      <form id="del-form-{{ q.id }}" method="POST" action="{{ url_for('admin.delete_question', q_id=q.id) }}" style="display:none;"></form>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+

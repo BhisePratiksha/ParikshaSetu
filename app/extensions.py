@@ -51,7 +51,19 @@ class MongoCompatibleCollection:
         if sort:
             # sort is list of (field, direction)
             for field, direction in reversed(sort):
-                docs.sort(key=lambda x: x.get(field, ''), reverse=(direction < 0))
+                def _safe_sort_key(x, _field=field):
+                    val = x.get(_field, 0)
+                    if val is None:
+                        return 0 if _field == 'question_number' else ''
+                    if isinstance(val, (int, float)):
+                        return val
+                    if _field == 'question_number':
+                        try:
+                            return int(val)
+                        except (ValueError, TypeError):
+                            return 0
+                    return str(val)
+                docs.sort(key=_safe_sort_key, reverse=(direction < 0))
         # deep copy
         return [dict(d) for d in docs]
 
@@ -101,6 +113,29 @@ class MongoCompatibleCollection:
             return True
         return False
 
+    def update_many(self, query, update, upsert=False):
+        query = query or {}
+        modified_count = 0
+        coll = self.store.data.get(self.name, [])
+        for d in coll:
+            if self._matches(d, query):
+                if '$set' in update:
+                    d.update(update['$set'])
+                d['updated_at'] = datetime.utcnow().isoformat()
+                modified_count += 1
+        if modified_count > 0:
+            self.store.save()
+        elif upsert and modified_count == 0:
+            new_doc = dict(query)
+            if '$set' in update:
+                new_doc.update(update['$set'])
+            self.insert_one(new_doc)
+            modified_count = 1
+        class UpdateResult:
+            def __init__(self, count):
+                self.modified_count = count
+        return UpdateResult(modified_count)
+
     def delete_one(self, query):
         query = query or {}
         coll = self.store.data.get(self.name, [])
@@ -110,6 +145,19 @@ class MongoCompatibleCollection:
                 self.store.save()
                 return True
         return False
+
+    def delete_many(self, query):
+        query = query or {}
+        coll = self.store.data.get(self.name, [])
+        initial_len = len(coll)
+        self.store.data[self.name] = [d for d in coll if not self._matches(d, query)]
+        deleted_count = initial_len - len(self.store.data[self.name])
+        if deleted_count > 0:
+            self.store.save()
+        class DeleteResult:
+            def __init__(self, count):
+                self.deleted_count = count
+        return DeleteResult(deleted_count)
 
     def count_documents(self, query=None):
         return len(self.find(query))

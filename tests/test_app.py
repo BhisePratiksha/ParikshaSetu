@@ -114,5 +114,64 @@ class ParikshaSetuTestCase(unittest.TestCase):
         self.assertTrue(result['success'])
         self.assertGreaterEqual(result['total_processed'], 2)
 
+    def test_pua_text_normalization(self):
+        """Test Devanagari PUA ligature decoding to standard Marathi text"""
+        from app.services.pdf_extractor_service import PdfExtractorService
+        sample = '\ue0a0. 1. खाल\ue196ल पया\ue016यांमधून संयु\ue044त \ue061यंजनांनी'
+        normalized = PdfExtractorService.normalize_text(sample)
+        self.assertIn('प्र.', normalized)
+        self.assertIn('खालील', normalized)
+        self.assertIn('संयुक्त', normalized)
+
+    def test_pdf_question_extraction_and_answer_matching(self):
+        """Test complete automatic PDF question extraction and answer key matching"""
+        import os
+        from app.services.pdf_extractor_service import PdfExtractorService
+        pdf_path = os.path.join(self.app.root_path, 'static', 'uploads', 'pdfs', 'police-bharti_2025_59670129_Yavatmal_Police_Bharti_Question_Paper_2026_-_Question_Paper_-_MahaSarav.pdf')
+        if not os.path.exists(pdf_path):
+            self.skipTest("Sample PDF not found")
+
+        res = PdfExtractorService.extract_and_process_pdf(
+            pdf_path=pdf_path,
+            paper_id='pb-2025-yavatmal',
+            exam_id='police-bharti',
+            year=2025,
+            replace_existing=True
+        )
+        self.assertTrue(res['success'])
+        self.assertEqual(res['total_questions'], 100)
+        self.assertEqual(res['answer_keys_found'], 100)
+        self.assertEqual(res['document_type'], 'combined')
+
+        # Verify Q1 details
+        q1 = db.questions.find_one({'paper_id': 'pb-2025-yavatmal', 'question_number': 1})
+        self.assertIsNotNone(q1)
+        self.assertEqual(q1['correct_index'], 1) # Option B
+        self.assertEqual(q1['answer_source'], 'Official Answer Key')
+        self.assertEqual(q1['subject_id'], 'pb-marathi')
+        self.assertIn('स्पष्टीकरण', q1['explanation'])
+
+        # Verify duplicate detection
+        dup_res = PdfExtractorService.extract_and_process_pdf(
+            pdf_path=pdf_path,
+            paper_id='pb-2025-yavatmal',
+            exam_id='police-bharti',
+            year=2025,
+            replace_existing=False
+        )
+        self.assertTrue(dup_res.get('already_imported', False))
+
+    def test_paper_solutions_page(self):
+        """Test candidate-facing Paper Solutions & Explanations view"""
+        response = self.client.get('/papers/pb-2025-yavatmal/solutions')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('स्पष्टीकरणे'.encode('utf-8'), response.data)
+
+    def test_category_exam_questions_page(self):
+        """Test category-wise Question Bank browser page"""
+        response = self.client.get('/exams/police-bharti/questions')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('प्रश्नसंच'.encode('utf-8'), response.data)
+
 if __name__ == '__main__':
     unittest.main()

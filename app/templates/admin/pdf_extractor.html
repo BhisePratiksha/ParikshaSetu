@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}PDF प्रश्न निष्कर्षण केंद्र — Admin — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <h3 class="fw-bold text-dark mb-1"><i class="bi bi-file-earmark-code-fill text-primary me-2"></i>PDF प्रश्न निष्कर्षण व विश्लेषण केंद्र (PDF Question Extractor)</h3>
+      <p class="text-muted small mb-0">कोणत्याही परीक्षेची PDF प्रश्नपत्रिका आणि उत्तरतालिका अपलोड करा; सिस्टम आपोआप प्रश्न, पर्याय, अचूक उत्तरे व स्पष्टीकरणे तयार करेल.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('admin.manage_papers') }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-file-earmark-pdf"></i> प्रश्नपत्रिका यादी
+      </a>
+      <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-dark btn-sm">
+        <i class="bi bi-arrow-left"></i> डॅशबोर्ड
+      </a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Upload and Extraction Form -->
+    <div class="col-lg-5">
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-upload text-success me-2"></i>नवीन PDF अपलोड व निष्कर्षण</h5>
+
+        <form method="POST" action="{{ url_for('admin.pdf_extractor_tool') }}" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">संबंधित परीक्षा (Select Exam)</label>
+            <select name="exam_id" class="form-select form-select-sm" required>
+              {% for ex in exams %}
+                <option value="{{ ex.id }}">{{ ex.name_mr }} ({{ ex.id }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">वर्ष (Exam Year)</label>
+              <input type="number" name="year" class="form-control form-control-sm" required value="2025">
+            </div>
+            <div class="col-6">
+              <label class="form-label small fw-bold text-muted">जिल्हा (District)</label>
+              <input type="text" name="district" class="form-control form-control-sm" required value="Maharashtra">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-muted">प्रश्नपत्रिकेचे नाव (Paper Title)</label>
+            <input type="text" name="title" class="form-control form-control-sm" required placeholder="उदा. Maharashtra Police Bharti 2025 Solved Paper">
+          </div>
+
+          <div class="mb-3 p-3 border rounded bg-light">
+            <label class="form-label small fw-bold text-primary mb-1">
+              <i class="bi bi-file-earmark-pdf-fill me-1"></i> प्रश्नपत्रिका PDF फाईल निवडा:
+            </label>
+            <input type="file" name="pdf_file" class="form-control form-control-sm" accept=".pdf" required>
+            <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">मजकूर (Text) किंवा स्कॅन केलेली (Scanned/OCR) दोन्ही प्रकारची PDF समर्थित आहेत.</small>
+          </div>
+
+          <div class="mb-4 p-3 border rounded bg-light">
+            <label class="form-label small fw-bold text-success mb-1">
+              <i class="bi bi-key-fill me-1"></i> स्वतंत्र उत्तरतालिका (ऐच्छिक - Separate Answer Key PDF):
+            </label>
+            <input type="file" name="answer_key_file" class="form-control form-control-sm" accept=".pdf">
+            <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">मूळ PDF च्या शेवटी उत्तरतालिका असल्यास ही स्वतंत्र फाईल जोडण्याची गरज नाही.</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">
+            <i class="bi bi-gear-wide-connected me-1"></i> आपोआप निष्कर्षण सुरू करा (Start Automatic Extraction)
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Extraction Pipeline Info & Recent Logs -->
+    <div class="col-lg-7">
+      <div class="custom-card p-4 bg-white mb-4">
+        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-diagram-3 text-primary me-2"></i>स्वयंचलित निष्कर्षण प्रणाली कार्यपद्धती (Pipeline)</h5>
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <strong class="d-block text-dark small mb-1"><i class="bi bi-1-circle-fill text-primary me-1"></i> PDF वाचन व लेआउट विश्लेषण</strong>
+              <p class="text-muted mb-0" style="font-size: 0.75rem;">२-स्तंभ (Dual Column) लेआउट शोधून प्रश्न क्रमवारी अबाधित ठेवली जाते.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <strong class="d-block text-dark small mb-1"><i class="bi bi-2-circle-fill text-primary me-1"></i> प्रश्न व पर्याय ओळख</strong>
+              <p class="text-muted mb-0" style="font-size: 0.75rem;">प्र. क्र., प्रश्न मजकूर व A, B, C, D पर्याय वेगळे केले जातात.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <strong class="d-block text-dark small mb-1"><i class="bi bi-3-circle-fill text-primary me-1"></i> उत्तरतालिका जुळणी</strong>
+              <p class="text-muted mb-0" style="font-size: 0.75rem;">प्रश्न क्रमांकांनुसार उत्तरांची तंतोतंत पडताळणी व जुळणी होते.</p>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="p-3 border rounded-3 bg-light h-100">
+              <strong class="d-block text-dark small mb-1"><i class="bi bi-4-circle-fill text-primary me-1"></i> स्पष्टीकरण निर्मिती</strong>
+              <p class="text-muted mb-0" style="font-size: 0.75rem;">प्रत्येक प्रश्नासाठी सविस्तर शैक्षणिक स्पष्टीकरण व सूत्र मांडणी तयार होते.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Extractions Log -->
+      <div class="custom-card p-4 bg-white">
+        <h5 class="fw-bold text-dark mb-3">अलीकडील PDF निष्कर्षण नोंदी (Recent Extraction Logs)</h5>
+        {% if recent_extractions %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle small mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>PDF फाईल</th>
+                  <th>परीक्षा</th>
+                  <th>प्रश्न</th>
+                  <th>उत्तरे</th>
+                  <th>स्थिती</th>
+                  <th>कृती</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for log in recent_extractions %}
+                <tr>
+                  <td><strong class="text-dark">{{ log.file_name }}</strong></td>
+                  <td><span class="badge badge-navy">{{ log.exam_id }}</span></td>
+                  <td><span class="badge bg-primary">{{ log.total_questions_extracted }} प्रश्न</span></td>
+                  <td><span class="badge bg-success">{{ log.answer_keys_found }} उत्तरे</span></td>
+                  <td><span class="badge bg-success-subtle text-success border">{{ log.status }}</span></td>
+                  <td>
+                    <a href="{{ url_for('admin.review_paper_questions', paper_id=log.paper_id) }}" class="btn btn-sm btn-outline-primary py-0 px-2">
+                      पहा &nearr;
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-muted small">अद्याप कोणतीही निष्कर्षण नोंद नाही.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

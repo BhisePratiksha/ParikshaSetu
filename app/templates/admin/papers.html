@@ -10,6 +10,9 @@
       <p class="text-muted small mb-0">मागील वर्षांच्या प्रश्नपत्रिका तयार करा, अधिकृत PDF आणि उत्तरतालिका अपलोड करा.</p>
     </div>
     <div>
+      <a href="{{ url_for('admin.pdf_extractor_tool') }}" class="btn btn-primary btn-sm fw-bold me-2">
+        <i class="bi bi-file-earmark-code-fill"></i> PDF प्रश्न निष्कर्षण केंद्र
+      </a>
       <a href="{{ url_for('admin.import_papers') }}" class="btn btn-warning btn-sm fw-bold me-2">
         <i class="bi bi-cloud-download"></i> JSON API आयात
       </a>
@@ -110,6 +113,7 @@
                 <th>शीर्षक</th>
                 <th>PDF</th>
                 <th>Key</th>
+                <th>निष्कर्षित प्रश्न</th>
                 <th>कृती</th>
               </tr>
             </thead>
@@ -139,11 +143,32 @@
                   {% endif %}
                 </td>
                 <td>
-                  <form method="POST" action="{{ url_for('admin.delete_paper', paper_id=p.id) }}" onsubmit="return confirm('खात्री आहे का? हा पेपर हटवायचा आहे?');" class="d-inline">
-                    <button type="submit" class="btn btn-outline-danger btn-sm p-1" title="हटवा">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
+                  {% if p.extracted_count and p.extracted_count > 0 %}
+                    <a href="{{ url_for('admin.review_paper_questions', paper_id=p.id) }}" class="badge bg-success text-decoration-none">
+                      <i class="bi bi-check-circle me-1"></i>{{ p.extracted_count }} प्रश्न
+                    </a>
+                  {% else %}
+                    <span class="badge bg-light text-muted border">० प्रश्न</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="d-flex gap-1">
+                    {% if p.pdf_url %}
+                      <a href="{{ url_for('admin.review_paper_questions', paper_id=p.id) }}" class="btn btn-outline-primary btn-sm p-1" title="प्रश्न पूर्वावलोकन व संपादन">
+                        <i class="bi bi-pencil-square"></i>
+                      </a>
+                      <form method="POST" action="{{ url_for('admin.extract_paper', paper_id=p.id) }}" class="d-inline" onsubmit="return confirm('पुन्हा PDF निष्कर्षण करायचे का?');">
+                        <button type="submit" class="btn btn-outline-warning btn-sm p-1" title="PDF पुन्हा निष्कर्षित करा">
+                          <i class="bi bi-arrow-repeat"></i>
+                        </button>
+                      </form>
+                    {% endif %}
+                    <form method="POST" action="{{ url_for('admin.delete_paper', paper_id=p.id) }}" onsubmit="return confirm('खात्री आहे का? हा पेपर हटवायचा आहे?');" class="d-inline">
+                      <button type="submit" class="btn btn-outline-danger btn-sm p-1" title="हटवा">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
               {% endfor %}

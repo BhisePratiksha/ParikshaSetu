@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ paper.title }} — प्रश्नोत्तरे व सविस्तर स्पष्टीकरणे — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-2 small">
+        <li class="breadcrumb-item"><a href="{{ url_for('home.index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('papers.papers_list') }}" class="text-white-50 text-decoration-none">PYQ Papers</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('papers.paper_detail', paper_id=paper.id) }}" class="text-white-50 text-decoration-none">{{ paper.id }}</a></li>
+        <li class="breadcrumb-item active text-warning" aria-current="page">Solutions & Explanations</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <span class="badge badge-saffron mb-2">{{ exam.name_mr if exam else paper.exam_id }}</span>
+        <h1 class="h3 fw-bold text-white mb-1"><i class="bi bi-patch-check-fill text-warning me-2"></i>{{ paper.title }} — प्रश्नोत्तरे व सविस्तर स्पष्टीकरणे</h1>
+        <small class="text-light opacity-90">
+          <i class="bi bi-geo-alt me-1"></i> {{ paper.district }} • {{ paper.year }} • एकूण प्रश्न: {{ questions|length }}
+        </small>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="{{ url_for('tests.solve_paper', paper_id=paper.id) }}" class="btn btn-success fw-bold text-white shadow-sm">
+          <i class="bi bi-play-circle-fill me-1"></i> थेट परीक्षा सोडवा (CBT)
+        </a>
+        <a href="{{ url_for('papers.view_pdf', paper_id=paper.id) }}" class="btn btn-outline-light">
+          <i class="bi bi-file-earmark-pdf me-1"></i> मूळ PDF पहा
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Search & Subject Filter Bar -->
+  <div class="custom-card p-3 mb-4 bg-white">
+    <form method="GET" action="{{ url_for('papers.view_solutions', paper_id=paper.id) }}" class="row g-2 align-items-center">
+      <div class="col-md-5">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+          <input type="text" name="search" class="form-control" placeholder="प्रश्नात किंवा स्पष्टीकरणात शोधा..." value="{{ search_query }}">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select name="subject" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व विषय (All Subjects)</option>
+          {% for s in subjects %}
+            <option value="{{ s.id }}" {% if selected_subject == s.id %}selected{% endif %}>{{ s.name_mr }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm fw-semibold w-100">
+          <i class="bi bi-funnel"></i> फिल्टर करा
+        </button>
+        {% if search_query or selected_subject != 'all' %}
+          <a href="{{ url_for('papers.view_solutions', paper_id=paper.id) }}" class="btn btn-outline-secondary btn-sm">रीसेट</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+
+  <div class="row g-4">
+    <!-- Questions List -->
+    <div class="col-lg-9">
+      {% if questions %}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0 text-dark">उपलब्ध प्रश्न ({{ questions|length }})</h5>
+          <span class="badge bg-success-subtle text-success border border-success-subtle">
+            <i class="bi bi-check2-all me-1"></i> अचूक उत्तर व स्पष्टीकरणासह
+          </span>
+        </div>
+
+        {% for q in questions %}
+        <div class="custom-card p-4 mb-4 bg-white" id="q-{{ q.question_number or loop.index }}">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-dark fs-6 px-3 py-1">प्रश्न {{ q.question_number or loop.index }}</span>
+              <span class="badge badge-navy">{{ q.subject }}</span>
+              {% if q.topic %}
+                <span class="badge bg-light text-dark border">{{ q.topic }}</span>
+              {% endif %}
+            </div>
+            <div>
+              {% if q.answer_source == 'Official Answer Key' %}
+                <span class="badge bg-success text-white">
+                  <i class="bi bi-shield-check me-1"></i> अधिकृत उत्तरतालिका (Official Key)
+                </span>
+              {% elif q.answer_source == 'Admin Verified' %}
+                <span class="badge bg-info text-dark">
+                  <i class="bi bi-patch-check me-1"></i> Admin Verified
+                </span>
+              {% else %}
+                <span class="badge bg-warning text-dark">
+                  <i class="bi bi-robot me-1"></i> AI-Verified
+                </span>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Question Text -->
+          <h5 class="fw-bold text-dark mb-3 lh-base">
+            {{ q.question_text }}
+          </h5>
+
+          {% if q.question_text_en %}
+            <p class="small text-muted fst-italic mb-3">{{ q.question_text_en }}</p>
+          {% endif %}
+
+          <!-- Options Grid -->
+          <div class="row g-2 mb-4">
+            {% for opt in q.options %}
+              {% set opt_idx = loop.index0 %}
+              {% set is_correct = (opt_idx == q.correct_index) %}
+              <div class="col-md-6">
+                <div class="p-3 rounded-3 border transition-all {% if is_correct %}bg-success-subtle border-success text-success fw-bold{% else %}bg-light text-dark border-light-subtle{% endif %}">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <span class="badge {% if is_correct %}bg-success text-white{% else %}bg-secondary text-white{% endif %} me-2">
+                        {{ ['A', 'B', 'C', 'D'][opt_idx] }}
+                      </span>
+                      <span>{{ opt }}</span>
+                    </div>
+                    {% if is_correct %}
+                      <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Verified Explanation Box -->
+          <div class="p-3 rounded-3 border bg-light-subtle border-success-subtle">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi bi-lightbulb-fill text-warning fs-5"></i>
+              <strong class="text-success fs-6">अचूक उत्तर व सविस्तर स्पष्टीकरण (Detailed Explanation):</strong>
+            </div>
+            <div class="text-dark small lh-lg ps-4 border-start border-3 border-success">
+              {{ q.explanation }}
+            </div>
+          </div>
+
+          {% if q.pdf_source %}
+            <div class="text-end mt-2">
+              <small class="text-muted" style="font-size: 0.72rem;">
+                <i class="bi bi-file-earmark-pdf me-1"></i> PDF स्त्रोत: {{ q.pdf_source }}
+              </small>
+            </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info p-4 text-center">
+          <i class="bi bi-info-circle fs-3 d-block mb-2"></i>
+          या निकषांनुसार कोणतेही प्रश्न सापडले नाहीत. कृपया शोध शब्द किंवा विषय बदलून पहा.
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Quick Navigation Palette (Sidebar) -->
+    <div class="col-lg-3">
+      <div class="custom-card p-3 sticky-top bg-white" style="top: 90px;">
+        <h6 class="fw-bold mb-3 text-dark"><i class="bi bi-grid-3x3-gap-fill text-primary me-2"></i>प्रश्न पॅलेट (Quick Jump)</h6>
+        <div class="d-flex flex-wrap gap-1 overflow-auto" style="max-height: 400px;">
+          {% for q in questions %}
+            <a href="#q-{{ q.question_number or loop.index }}" class="btn btn-sm btn-outline-secondary p-1 text-center" style="width: 38px; height: 32px; font-size: 0.75rem;">
+              {{ q.question_number or loop.index }}
+            </a>
+          {% endfor %}
+        </div>
+
+        <hr class="my-3">
+
+        <div class="d-grid gap-2">
+          <a href="{{ url_for('tests.solve_paper', paper_id=paper.id) }}" class="btn btn-success fw-bold btn-sm">
+            <i class="bi bi-play-circle-fill me-1"></i> थेट सराव टेस्ट सुरू करा
+          </a>
+          <a href="{{ url_for('papers.download_pdf', paper_id=paper.id) }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-download me-1"></i> मूळ PDF डाऊनलोड
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

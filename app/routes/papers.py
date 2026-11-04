@@ -65,6 +65,45 @@ def paper_detail(paper_id):
         question_count=question_count
     )
 
+@papers_bp.route('/papers/<paper_id>/solutions')
+def view_solutions(paper_id):
+    """View all extracted questions, options, verified answers, and detailed pedagogical explanations"""
+    paper = PaperService.get_paper_by_id(paper_id)
+    if not paper:
+        abort(404)
+
+    exam = db.exams.find_one({'id': paper.get('exam_id')})
+    subject_filter = request.args.get('subject', 'all')
+    search = request.args.get('search', '').strip()
+
+    query = {'paper_id': paper_id}
+    if subject_filter != 'all':
+        query['subject_id'] = subject_filter
+
+    questions = db.questions.find(query, sort=[('question_number', 1)])
+    
+    # If no paper-specific questions exist, fallback to general exam questions
+    if not questions and exam:
+        query_exam = {'exam_id': exam.get('id')}
+        if subject_filter != 'all':
+            query_exam['subject_id'] = subject_filter
+        questions = db.questions.find(query_exam)
+
+    if search:
+        questions = [q for q in questions if search.lower() in q.get('question_text', '').lower() or search.lower() in q.get('explanation', '').lower()]
+
+    subjects = db.subjects.find({'exam_id': paper.get('exam_id')})
+
+    return render_template(
+        'paper_solutions.html',
+        paper=paper,
+        exam=exam,
+        questions=questions,
+        subjects=subjects,
+        selected_subject=subject_filter,
+        search_query=search
+    )
+
 @papers_bp.route('/papers/<paper_id>/pdf')
 def view_pdf(paper_id):
     """Dedicated in-browser embedded PDF viewer with graceful fallback"""

@@ -19,6 +19,9 @@
         <h6 class="text-light opacity-90 mb-0">{{ exam.name }} • <span class="badge badge-saffron">{{ exam.badge }}</span></h6>
       </div>
       <div>
+        <a href="{{ url_for('exams.exam_questions', exam_id=exam.id) }}" class="btn btn-outline-light me-2">
+          <i class="bi bi-question-diamond-fill me-1"></i> सराव प्रश्नसंच
+        </a>
         <a href="{{ url_for('papers.papers_list', exam_id=exam.id) }}" class="btn btn-warning fw-bold text-dark">
           <i class="bi bi-file-earmark-pdf me-1"></i> सर्व प्रश्नपत्रिका पहा
         </a>

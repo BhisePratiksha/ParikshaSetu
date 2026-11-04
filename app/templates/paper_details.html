@@ -115,6 +115,18 @@
             <small class="d-block text-white-50 mt-1" style="font-size: 0.75rem;">वेळेच्या मर्यादेत प्रश्नपत्रिका सोडवा</small>
           </a>
 
+          <!-- Solutions & Explanations (New Feature) -->
+          <a href="{{ url_for('papers.view_solutions', paper_id=paper.id) }}" class="btn btn-warning btn-lg fw-bold text-dark shadow-sm text-start p-3">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <i class="bi bi-patch-check-fill fs-4 me-2 align-middle text-success"></i>
+                <span>प्रश्नोत्तरे व स्पष्टीकरणे (Solutions)</span>
+              </div>
+              <i class="bi bi-chevron-right"></i>
+            </div>
+            <small class="d-block text-dark-50 mt-1" style="font-size: 0.75rem;">PDF मधून काढलेले सर्व प्रश्न, अचूक उत्तरे व स्पष्टीकरणे पहा</small>
+          </a>
+
           <!-- 2. View PDF -->
           <a href="{{ url_for('papers.view_pdf', paper_id=paper.id) }}" class="btn btn-outline-primary btn-lg fw-semibold text-start p-3">
             <div class="d-flex align-items-center justify-content-between">

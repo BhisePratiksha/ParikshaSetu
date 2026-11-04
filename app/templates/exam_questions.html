@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ exam.name_mr }} — वर्गवारीनुसार प्रश्नसंच — ParikshaSetu{% endblock %}
+
+{% block content %}
+<div class="py-4 text-white" style="background: linear-gradient(135deg, #0d233a 0%, #1e3a5f 100%); border-bottom: 3px solid #ff6b00;">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-2 small">
+        <li class="breadcrumb-item"><a href="{{ url_for('home.index') }}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('exams.government_exams') }}" class="text-white-50 text-decoration-none">Govt Exams</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('exams.exam_details', exam_id=exam.id) }}" class="text-white-50 text-decoration-none">{{ exam.name }}</a></li>
+        <li class="breadcrumb-item active text-warning" aria-current="page">Question Bank</li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <div>
+        <h1 class="h2 fw-bold text-white mb-1"><i class="bi bi-collection text-warning me-2"></i>{{ exam.name_mr }} — वर्गवारीनुसार प्रश्नसंच</h1>
+        <small class="text-light opacity-90">{{ exam.name }} • PDF मधून निष्कर्षित केलेले सर्व सराव प्रश्न</small>
+      </div>
+      <div>
+        <span class="badge bg-warning text-dark fs-6 px-3 py-2 fw-bold">
+          {{ questions|length }} प्रश्न उपलब्ध
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-5">
+  <!-- Multi-Criteria Filter Bar -->
+  <div class="custom-card p-4 mb-4 bg-white">
+    <form method="GET" action="{{ url_for('exams.exam_questions', exam_id=exam.id) }}" class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">विषय (Subject Filter)</label>
+        <select name="subject" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व विषय (All Subjects)</option>
+          {% for s in subjects %}
+            <option value="{{ s.id }}" {% if selected_subject == s.id %}selected{% endif %}>{{ s.name_mr }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">वर्ष (Exam Year)</label>
+        <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व वर्षे (All Years)</option>
+          {% for y in years %}
+            <option value="{{ y }}" {% if selected_year|string == y|string %}selected{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">प्रश्नपत्रिका (Specific Paper)</label>
+        <select name="paper_id" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all">सर्व प्रश्नपत्रिका</option>
+          {% for p in papers %}
+            <option value="{{ p.id }}" {% if selected_paper == p.id %}selected{% endif %}>{{ p.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary btn-sm fw-bold w-100">
+          <i class="bi bi-funnel"></i> शोधा
+        </button>
+      </div>
+      <div class="col-12 mt-2">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+          <input type="text" name="search" class="form-control" placeholder="प्रश्नात किंवा घटकात शोधा..." value="{{ search_query }}">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Questions Display List -->
+  {% if questions %}
+    <div class="d-flex flex-column gap-4">
+      {% for q in questions %}
+      <div class="custom-card p-4 bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-dark">क्र. {{ q.question_number or loop.index }}</span>
+            <span class="badge badge-navy">{{ q.subject }}</span>
+            <span class="badge bg-light text-dark border">{{ q.topic }}</span>
+            {% if q.year %}
+              <span class="badge bg-secondary">{{ q.year }}</span>
+            {% endif %}
+          </div>
+          <div>
+            {% if q.answer_source == 'Official Answer Key' %}
+              <span class="badge bg-success text-white"><i class="bi bi-shield-check me-1"></i>Official Key</span>
+            {% else %}
+              <span class="badge bg-warning text-dark"><i class="bi bi-robot me-1"></i>AI-Verified</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <h5 class="fw-bold text-dark mb-3">{{ q.question_text }}</h5>
+
+        <!-- Options -->
+        <div class="row g-2 mb-3">
+          {% for opt in q.options %}
+            {% set is_correct = (loop.index0 == q.correct_index) %}
+            <div class="col-md-6">
+              <div class="p-2 px-3 rounded border small {% if is_correct %}bg-success-subtle border-success text-success fw-bold{% else %}bg-light text-dark{% endif %}">
+                <span class="badge {% if is_correct %}bg-success text-white{% else %}bg-secondary text-white{% endif %} me-2">
+                  {{ ['A', 'B', 'C', 'D'][loop.index0] }}
+                </span>
+                <span>{{ opt }}</span>
+                {% if is_correct %}
+                  <i class="bi bi-check-circle-fill text-success ms-1"></i>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Explanation -->
+        <div class="p-3 rounded bg-light border-start border-3 border-success small">
+          <strong class="text-success"><i class="bi bi-lightbulb-fill text-warning me-1"></i>स्पष्टीकरण (Explanation):</strong>
+          <div class="text-muted mt-1">{{ q.explanation }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center p-5">
+      <i class="bi bi-journal-x fs-1 text-primary d-block mb-3"></i>
+      <h5>या निकषांनुसार कोणतेही प्रश्न उपलब्ध नाहीत.</h5>
+      <p class="text-muted small">कृपया विषय किंवा वर्षाची निवड बदला.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
