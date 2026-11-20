@@ -30,4 +30,5 @@ class Config:
     # Security settings
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SECURE = os.getenv('FLASK_ENV', 'development') == 'production'
     PERMANENT_SESSION_LIFETIME = 86400  # 24 hours

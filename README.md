@@ -317,6 +317,85 @@ The database automatically seeds standard user credentials on initial boot:
 
 ---
 
+## 🚀 Deploying on Render
+
+ParikshaSetu is pre-configured for one-click deployment on **[Render](https://render.com)** as a Python Web Service using `gunicorn`.
+
+### Prerequisites
+1. **GitHub Repository**: Ensure this repository is pushed to your GitHub account (branch `Testing` or `main`).
+2. **MongoDB Atlas**: An active MongoDB Atlas cluster with Network Access whitelisted (`0.0.0.0/0` allowed or Render outbound IPs).
+3. **Render Account**: A free or paid account on [Render](https://render.com).
+
+---
+
+### Step-by-Step Deployment Instructions
+
+#### Option A: One-Click Blueprint Deployment (Recommended)
+Because the repository includes `render.yaml`, Render can configure the entire service automatically:
+1. Log in to [Render Dashboard](https://dashboard.render.com/).
+2. Click **New +** → **Blueprint**.
+3. Connect your GitHub account and select the **ParikshaSetu** repository.
+4. Select the target branch (`Testing` or `main`).
+5. Render will detect `render.yaml` and prompt for the sensitive environment variables (`MONGO_URI`, `SECRET_KEY`, `ADMIN_PASSWORD`, etc.).
+6. Enter your credentials and click **Apply**.
+
+---
+
+#### Option B: Manual Web Service Setup
+If creating the service manually through the Render Dashboard:
+
+1. **Create Web Service**:
+   - Go to [dashboard.render.com](https://dashboard.render.com/) → **New +** → **Web Service**.
+   - Connect and choose the **ParikshaSetu** repository.
+   - Choose Branch: `Testing` (or `main`).
+
+2. **Configure Service Settings**:
+   | Field | Value |
+   | :--- | :--- |
+   | **Name** | `parikshasetu` (or your preferred name) |
+   | **Region** | Singapore / Frankfurt / Oregon (closest to your users) |
+   | **Branch** | `Testing` (or `main`) |
+   | **Runtime** | `Python 3` |
+   | **Build Command** | `pip install -r requirements.txt` |
+   | **Start Command** | `gunicorn run:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120` |
+   | **Instance Type** | `Free` |
+
+3. **Configure Environment Variables**:
+   Under the **Environment** tab, add the following key-value pairs:
+
+   | Key | Example / Recommended Value | Description |
+   | :--- | :--- | :--- |
+   | `FLASK_ENV` | `production` | Enables production mode and secure cookies |
+   | `FLASK_DEBUG` | `0` | Disables debug mode in production |
+   | `SECRET_KEY` | *(generate a strong 32+ char random string)* | Used for signing session cookies |
+   | `MONGO_URI` | `mongodb+srv://<username>:<password>@cluster0.gq4njeq.mongodb.net/` | MongoDB Atlas connection string |
+   | `MONGO_DB_NAME` | `parikshasetu` | Target MongoDB database name |
+   | `DATABASE_NAME` | `parikshasetu` | Dual compatibility variable |
+   | `ADMIN_EMAIL` | `admin@parikshasetu.com` | Initial admin account email |
+   | `ADMIN_PASSWORD` | *(strong password, e.g. Admin@Secure2026)* | Initial admin account password |
+   | `STUDENT_EMAIL` | `student@parikshasetu.com` | Initial student account email |
+   | `STUDENT_PASSWORD` | *(strong password, e.g. Student@Secure2026)* | Initial student account password |
+   | `MAX_CONTENT_LENGTH` | `33554432` | 32 MB upload limit for PDF exam papers |
+   | `GEMINI_API_KEY` | *(optional)* | Google Gemini API key for OCR/question parsing |
+
+   > **Note**: Do **NOT** manually set `PORT` or `HOST` in the environment variables table. Render injects the `$PORT` dynamically, and `gunicorn` binds to `0.0.0.0:$PORT` automatically.
+
+4. **Whitelist Render on MongoDB Atlas**:
+   - In MongoDB Atlas, go to **Security** → **Network Access**.
+   - Click **Add IP Address**.
+   - Select **Allow Access from Anywhere** (`0.0.0.0/0`) or enter Render's outbound IP addresses.
+   - Click **Confirm**.
+
+5. **Deploy & Verify**:
+   - Click **Create Web Service** (or manual deploy).
+   - Watch the build and deploy logs.
+   - Once live, test the health check endpoint: `https://<your-render-app>.onrender.com/api/status`.
+   - Access the web interface at `https://<your-render-app>.onrender.com/`.
+
+---
+
+---
+
 ## 🌐 REST API Documentation
 
 ParikshaSetu exposes clean RESTful JSON endpoints for platform status and question papers:

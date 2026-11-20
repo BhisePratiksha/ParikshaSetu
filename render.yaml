@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: parikshasetu
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn run:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: MONGO_URI
+        sync: false     # Set this manually in Render dashboard — do NOT commit the value
+      - key: MONGO_DB_NAME
+        value: parikshasetu
+      - key: DATABASE_NAME
+        value: parikshasetu
+      - key: ADMIN_EMAIL
+        value: admin@parikshasetu.com
+      - key: ADMIN_PASSWORD
+        sync: false     # Set securely in Render dashboard
+      - key: ADMIN_NAME
+        value: System Administrator
+      - key: STUDENT_EMAIL
+        value: student@parikshasetu.com
+      - key: STUDENT_PASSWORD
+        sync: false     # Set securely in Render dashboard
+      - key: UPLOAD_FOLDER
+        value: app/static/uploads/pdfs
+      - key: MAX_CONTENT_LENGTH
+        value: "33554432"
+      - key: GEMINI_API_KEY
+        sync: false     # Optional — set if using AI explanation feature
